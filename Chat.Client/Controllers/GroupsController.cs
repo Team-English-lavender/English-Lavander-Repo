@@ -8,6 +8,8 @@ using System.Web.Http;
 
 namespace Chat.Client.Controllers
 {
+    [Authorize]
+    [RoutePrefix("api/Groups")]
     public class GroupsController : BaseController
     {
         public GroupsController()

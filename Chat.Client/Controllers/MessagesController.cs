@@ -14,6 +14,7 @@ using Microsoft.AspNet.Identity;
 namespace Chat.Client.Controllers
 {
     [Authorize]
+    [RoutePrefix("api/Messages")]
     public class MessagesController : BaseController
     {
 
