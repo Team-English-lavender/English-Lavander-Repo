@@ -28,12 +28,20 @@ namespace Chat.Client.Controllers
         {
         }
 
-        // GET api/messages
+        // GET api/messages/GetAll
         [HttpGet]
         [Route("GetAll")]
         public IEnumerable<string> GetAll()
         {
             return this.Data.Messages.All().Select(m => m.MessageText).ToList();
+        }
+
+        // GET api/messages/GetByGroup
+        [HttpGet]
+        [Route("GetByGroup")]
+        public IEnumerable<Message> GetByGroup([FromBody]int groupId)
+        {
+            return this.Data.Messages.All().Where(m => m.Group.Id == groupId).ToList();
         }
 
         // POST api/messages
