@@ -40,7 +40,7 @@ namespace Chat.Client.Controllers
             this.Data.Groups.Add(newGroup);
             this.Data.SaveChanges();
 
-            return Ok();
+            return this.Created("Groups", newGroup);
         }
     }
 }
