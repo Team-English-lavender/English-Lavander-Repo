@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web;
 using System.Web.Http;
-using Chat.Data.Repositories;
 using Chat.Data;
 using Chat.Model;
-using System.Data.Entity;
 using Microsoft.AspNet.Identity;
 
 namespace Chat.Client.Controllers
