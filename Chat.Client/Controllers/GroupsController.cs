@@ -1,13 +1,11 @@
-﻿using Chat.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-
-namespace Chat.Client.Controllers
+﻿namespace Chat.Client.Controllers
 {
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Web.Http;
+
+    using Data;
     using Models;
 
     [Authorize]
@@ -54,7 +52,7 @@ namespace Chat.Client.Controllers
 
         [HttpGet]
         [Route("GetByUserId")]
-        public IHttpActionResult GetByUserId([FromUri] string userId)
+        public IHttpActionResult GetByUserId([FromUri]string userId)
         {
             var groups = this.Data.Groups.All()
                 .Where(g => g.Users.Any(u => u.Id == userId))
@@ -83,9 +81,9 @@ namespace Chat.Client.Controllers
 
         [HttpPost]
         [Route("CreateGroup")]
-        public IHttpActionResult PostGroup([FromUri]string name)
+        public IHttpActionResult CreateGroup([FromBody]GroupsExportModel model)
         {
-            if (this.Data.Groups.All().Where(g => g.Name == name).Any())
+            if (this.Data.Groups.All().Where(g => g.Name == model.Name).Any())
 	        {
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound,
                         "Already exists group with that name."));
@@ -93,7 +91,7 @@ namespace Chat.Client.Controllers
 
             Group newGroup = new Group()
             {
-                Name = name               
+                Name = model.Name          
             };
 
             this.Data.Groups.Add(newGroup);
@@ -104,10 +102,10 @@ namespace Chat.Client.Controllers
 
         [HttpPost]
         [Route("AddUserToGroup")]
-        public IHttpActionResult AddUserToGroup([FromUri]string userId, int groupId)
+        public IHttpActionResult AddUserToGroup([FromBody]GroupAddUserImportModel model)
         {
-            var user = this.Data.Users.All().Where(u => u.Id == userId).FirstOrDefault();
-            var group = this.Data.Groups.All().Where(g => g.Id == groupId).FirstOrDefault();
+            var user = this.Data.Users.All().Where(u => u.Id == model.UserId).FirstOrDefault();
+            var group = this.Data.Groups.All().Where(g => g.Id == model.GroupId).FirstOrDefault();
 
             if (user == null)
             {

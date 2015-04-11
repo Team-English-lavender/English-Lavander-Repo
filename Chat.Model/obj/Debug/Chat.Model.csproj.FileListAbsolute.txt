@@ -38,4 +38,3 @@ C:\Users\Jazzy\Desktop\AppHarbor-Test\Chat.Model\bin\Debug\MongoDB.Driver.xml
 C:\Users\Jazzy\Desktop\AppHarbor-Test\Chat.Model\bin\Debug\MongoDB.Driver.Legacy.xml
 C:\Users\Jazzy\Desktop\AppHarbor-Test\Chat.Model\obj\Debug\Chat.Model.dll
 C:\Users\Jazzy\Desktop\AppHarbor-Test\Chat.Model\obj\Debug\Chat.Model.pdb
-C:\Users\Jazzy\Desktop\Team-EnglishLavander\Chat.Model\obj\Debug\Chat.Model.csprojResolveAssemblyReference.cache

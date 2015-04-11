@@ -1,15 +1,10 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Chat.Model;
-
-namespace Chat.Data
+﻿namespace Chat.Data
 {
+    using System.Data.Entity;
+    using Microsoft.AspNet.Identity.EntityFramework;
+
+    using Model;
+
     public class ChatDbContext : IdentityDbContext<User>, IChatDbContext 
     {
         public ChatDbContext()

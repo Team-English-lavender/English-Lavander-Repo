@@ -53,7 +53,16 @@ namespace Chat.Client.Controllers
             var messages = this.Data.Messages.All()
                 .Where(m => m.Group.Id == groupId)
                 .Select(m =>
-                    new MessagesExportModel() { Id = m.Id, GroupId = m.GroupId, MessageText = m.MessageText, Time = m.Time, UserId = m.UserId}
+                    new MessagesExportModel()
+                    {
+                        Id = m.Id,
+                        MessageText = m.MessageText,
+                        Time = m.Time,
+                        UserId = m.UserId,
+                        UserName = m.User.UserName,
+                        GroupId = m.GroupId,
+                        GroupName = m.Group.Name
+                    }
                 )
                 .ToList();
 
@@ -79,10 +88,12 @@ namespace Chat.Client.Controllers
                     new MessagesExportModel()
                     {
                         Id = m.Id, 
-                        GroupId = m.GroupId, 
+                        GroupId = m.GroupId,
+                        GroupName = m.Group.Name,
                         MessageText = m.MessageText, 
                         Time = m.Time, 
-                        UserId = m.UserId
+                        UserId = m.UserId,
+                        UserName = m.User.UserName
                     }
                 )
                 .ToList();
@@ -98,9 +109,10 @@ namespace Chat.Client.Controllers
         // POST api/messages
         [HttpPost]
         [Route("PostMessage")]
-        public IHttpActionResult Post([FromUri]string text, int groupId)
+        public IHttpActionResult Post([FromBody]MessagesImportModel model)
         {
             var currentUserId = this.User.Identity.GetUserId();
+
             if (currentUserId == null)
             {
                 return this.BadRequest("Not logged please logg in !");
@@ -108,15 +120,15 @@ namespace Chat.Client.Controllers
 
             Message newMessage = new Message()
             {
-                MessageText = text,
+                MessageText = model.Text,
                 Time = DateTime.Now,
                 UserId = currentUserId,
-                GroupId = groupId
+                GroupId = model.GroupId
             };
             
             this.Data.Messages.Add(newMessage);
             this.Data.SaveChanges();
-            return Ok();
+            return this.Created("Message", newMessage);
         }
     }
 }
