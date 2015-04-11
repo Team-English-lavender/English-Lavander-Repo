@@ -8,10 +8,16 @@ using Microsoft.AspNet.Identity;
 
 namespace Chat.Client.Controllers
 {
+    using System.Net;
+    using System.Net.Http;
+    using Models;
+    using WebGrease.Css.Extensions;
+
     [Authorize]
     [RoutePrefix("api/Messages")]
     public class MessagesController : BaseController
     {
+        private const int LastMessagesCount = 20;
 
         public MessagesController()
             : this (new ChatData(new ChatDbContext()))
@@ -34,10 +40,59 @@ namespace Chat.Client.Controllers
 
         // GET api/messages/GetByGroup
         [HttpGet]
-        [Route("GetByGroup")]
-        public IEnumerable<Message> GetByGroup([FromBody]int groupId)
+        [Route("GetAllByGroup")]
+        public IHttpActionResult GetAllByGroup([FromUri]int groupId)
         {
-            return this.Data.Messages.All().Where(m => m.Group.Id == groupId).ToList();
+            var group = this.Data.Groups.All().Where(g => g.Id == groupId).FirstOrDefault();
+
+            if (group == null)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No such group."));
+            }
+
+            var messages = this.Data.Messages.All()
+                .Where(m => m.Group.Id == groupId)
+                .Select(m =>
+                    new MessagesExportModel() { Id = m.Id, GroupId = m.GroupId, MessageText = m.MessageText, Time = m.Time, UserId = m.UserId}
+                )
+                .ToList();
+
+            if (!messages.Any())
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No messages in this group."));
+            }
+
+            return this.Ok(messages);
+        }
+
+        [HttpGet]
+        [Route("GetLastByGroup")]
+        public IHttpActionResult GetLastByGroup([FromUri]int groupId, int? count)
+        {
+            int messagesCount = count ?? LastMessagesCount;
+
+            var messages = this.Data.Messages.All()
+                .Where(m => m.Group.Id == groupId)
+                .OrderByDescending(m => m.Id)
+                .Take(messagesCount)
+                .Select(m =>
+                    new MessagesExportModel()
+                    {
+                        Id = m.Id, 
+                        GroupId = m.GroupId, 
+                        MessageText = m.MessageText, 
+                        Time = m.Time, 
+                        UserId = m.UserId
+                    }
+                )
+                .ToList();
+
+            if (!messages.Any())
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No messages in this group."));
+            }
+
+            return this.Ok(messages);
         }
 
         // POST api/messages

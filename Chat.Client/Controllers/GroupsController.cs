@@ -8,6 +8,8 @@ using System.Web.Http;
 
 namespace Chat.Client.Controllers
 {
+    using Models;
+
     [Authorize]
     [RoutePrefix("api/Groups")]
     public class GroupsController : BaseController
@@ -21,6 +23,41 @@ namespace Chat.Client.Controllers
             : base(data)
         {
             
+        }
+
+        [HttpGet]
+        [Route("GetAll")]
+        public IHttpActionResult GetAll()
+        {
+            var groups = this.Data.Groups.All()
+                .Select(g =>
+                    new GroupsExportModel()
+                    {
+                        Id = g.Id,
+                        Name = g.Name,
+                        Messages = g.Messages.Select(gm => new MessagesExportModel()
+                        {
+                          Id  = gm.Id,
+                          UserId = gm.UserId,
+                          GroupId = gm.GroupId,
+                          MessageText = gm.MessageText,
+                          Time = gm.Time
+                        }),
+                        Users = g.Users.Select(u => new UsersExportModel()
+                        {
+                            Id = u.Id,
+                            UserName = u.UserName
+                        })
+                    }
+                )
+                .ToList();
+
+            if (!groups.Any())
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "Currently dont have created groups"));
+            }
+
+            return this.Ok(groups);
         }
 
         [HttpPost]
