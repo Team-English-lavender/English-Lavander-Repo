@@ -11,7 +11,6 @@ namespace Chat.Client.Controllers
     using System.Net;
     using System.Net.Http;
     using Models;
-    using WebGrease.Css.Extensions;
 
     [Authorize]
     [RoutePrefix("api/Messages")]
