@@ -12,7 +12,5 @@ namespace Chat.Client.Models
         public string Name { get; set; }
 
         public virtual IEnumerable<UsersExportModel> Users { get; set; }
-
-        public virtual IEnumerable<MessagesExportModel> Messages { get; set; }
     }
 }

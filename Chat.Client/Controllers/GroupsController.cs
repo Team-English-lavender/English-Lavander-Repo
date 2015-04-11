@@ -35,14 +35,6 @@ namespace Chat.Client.Controllers
                     {
                         Id = g.Id,
                         Name = g.Name,
-                        Messages = g.Messages.Select(gm => new MessagesExportModel()
-                        {
-                          Id  = gm.Id,
-                          UserId = gm.UserId,
-                          GroupId = gm.GroupId,
-                          MessageText = gm.MessageText,
-                          Time = gm.Time
-                        }),
                         Users = g.Users.Select(u => new UsersExportModel()
                         {
                             Id = u.Id,
@@ -60,13 +52,43 @@ namespace Chat.Client.Controllers
             return this.Ok(groups);
         }
 
+        [HttpGet]
+        [Route("GetByUserId")]
+        public IHttpActionResult GetByUserId([FromUri] string userId)
+        {
+            var groups = this.Data.Groups.All()
+                .Where(g => g.Users.Any(u => u.Id == userId))
+                .Select(g =>
+                    new GroupsExportModel()
+                    {
+                        Id = g.Id,
+                        Name = g.Name,
+                        Users = g.Users.Select(u => new UsersExportModel()
+                        {
+                            Id = u.Id,
+                            UserName = u.UserName
+                        })
+                    }
+                )
+                .ToList();
+
+            if (!groups.Any())
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound,
+                        "Currently dont have groups with that user."));
+            }
+
+            return this.Ok(groups);
+        }
+
         [HttpPost]
-        [Route("PostGroup")]
+        [Route("CreateGroup")]
         public IHttpActionResult PostGroup([FromUri]string name)
         {
             if (this.Data.Groups.All().Where(g => g.Name == name).Any())
 	        {
-		        return BadRequest("Already exists group with that name.");
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound,
+                        "Already exists group with that name."));
 	        }
 
             Group newGroup = new Group()
@@ -78,6 +100,29 @@ namespace Chat.Client.Controllers
             this.Data.SaveChanges();
 
             return this.Created("Groups", newGroup);
+        }
+
+        [HttpPost]
+        [Route("AddUserToGroup")]
+        public IHttpActionResult AddUserToGroup([FromUri]string userId, int groupId)
+        {
+            var user = this.Data.Users.All().Where(u => u.Id == userId).FirstOrDefault();
+            var group = this.Data.Groups.All().Where(g => g.Id == groupId).FirstOrDefault();
+
+            if (user == null)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound,
+                        "No User with specified Id found."));
+            }
+            if (group == null)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound,
+                        "No Group with specified Id found."));
+            }
+
+            group.Users.Add(user);
+            this.Data.SaveChanges();
+            return this.Ok(new { GroupId = group.Id, UserId = user.Id});
         }
     }
 }
