@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http;
-using Chat.Data;
-using Chat.Model;
-using Microsoft.AspNet.Identity;
-
-namespace Chat.Client.Controllers
+﻿namespace Chat.Client.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Web.Http;
+    using Microsoft.AspNet.Identity;
+
+    using Data;
+    using Model;
     using Models;
 
     [Authorize]
@@ -32,9 +32,27 @@ namespace Chat.Client.Controllers
         // GET api/messages/GetAll
         [HttpGet]
         [Route("GetAll")]
-        public IEnumerable<string> GetAll()
+        public IHttpActionResult GetAll()
         {
-            return this.Data.Messages.All().Select(m => m.MessageText).ToList();
+            var messages = this.Data.Messages.All().Select(m => 
+                    new MessagesExportModel()
+                    {
+                        Id = m.Id,
+                        UserId = m.UserId,
+                        UserName = m.User.UserName,
+                        GroupId = m.GroupId,
+                        GroupName = m.Group.Name,
+                        Time = m.Time,
+                        MessageText = m.MessageText
+                    }
+                )
+                .ToList();
+
+            if (!messages.Any())
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No messages in data base."));
+            }
+            return this.Ok(messages);
         }
 
         // GET api/messages/GetByGroup
