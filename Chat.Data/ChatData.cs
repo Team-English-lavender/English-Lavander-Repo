@@ -35,11 +35,11 @@ namespace Chat.Data
             }
         }
 
-        public IRepository<Message> Messages
+        public IMessagesRepository Messages
         {
             get
             {
-                return this.GetRepository<Message>();
+                return (IMessagesRepository)this.GetRepository<Message>();
             }
         }
 
@@ -57,6 +57,10 @@ namespace Chat.Data
                 if (type.IsAssignableFrom(typeof(User)))
                 {
                     repositoryType = typeof(UserRepository);
+                }
+                if (type.IsAssignableFrom(typeof(Message)))
+                {
+                    repositoryType = typeof(MessagesRepository);
                 }
                 this.repositories.Add(typeof(T), Activator.CreateInstance(repositoryType, this.context));
             }

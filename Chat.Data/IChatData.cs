@@ -15,7 +15,7 @@ namespace Chat.Data
 
         IRepository<Group> Groups { get; }
 
-        IRepository<Message> Messages { get; }
+        IMessagesRepository Messages { get; }
 
         int SaveChanges();
     }

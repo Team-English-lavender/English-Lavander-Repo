@@ -12,8 +12,6 @@ namespace Chat.Model
 {
     public class Message
     {
-        //[BsonId]
-        //public ObjectId Id { get; set; }
         [Key]
         public int Id { get; set; }
 

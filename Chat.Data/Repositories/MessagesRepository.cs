@@ -1,103 +1,78 @@
-﻿using System;
-namespace Chat.Data.Repositories
+﻿namespace Chat.Data.Repositories
 {
-    using System.Collections.Generic;
+    using Chat.Model;
     using System.Linq;
-    using System.Net;
-    using Model;
+    using ExportModels;
 
-    class MessagesRepository : GenericRepository<Message>
+    class MessagesRepository : GenericRepository<Message>, IMessagesRepository
     {
         public MessagesRepository(IChatDbContext context)
             : base (context)
         {
         }
 
-        //public IEnumerable<Message> GetAll()
-        //{
-        //    var messages = this.All()
-        //        .Select(m => 
-        //            new MessagesExportModel()
-        //            {
-        //                Id = m.Id,
-        //                UserId = m.UserId,
-        //                UserName = m.User.UserName,
-        //                GroupId = m.GroupId,
-        //                GroupName = m.Group.Name,
-        //                Time = m.Time,
-        //                MessageText = m.MessageText
-        //            }
-        //        )
+        public IQueryable<MessagesExportModel> GetAll()
+        {
+            var messages = this.All()
+                .Select(m =>
+                    new MessagesExportModel()
+                    {
+                        Id = m.Id,
+                        UserId = m.UserId,
+                        UserName = m.User.UserName,
+                        GroupId = m.GroupId,
+                        GroupName = m.Group.Name,
+                        Time = m.Time,
+                        MessageText = m.MessageText
+                    }
+                );
 
-        //}
+            return messages;
+        }
 
-        //// GET api/messages/GetByGroup
-        //[HttpGet]
-        //[Route("GetAllByGroup")]
-        //public IHttpActionResult GetAllByGroup([FromUri]int groupId)
-        //{
-        //    var group = this.Data.Groups.All().Where(g => g.Id == groupId).FirstOrDefault();
+        public IQueryable<MessagesExportModel> GetAllByGroupId(int groupId)
+        {
+            var messages = this.All()
+                .Where(m => m.Group.Id == groupId)
+                .Select(m =>
+                    new MessagesExportModel()
+                    {
+                        Id = m.Id,
+                        MessageText = m.MessageText,
+                        Time = m.Time,
+                        UserId = m.UserId,
+                        UserName = m.User.UserName,
+                        GroupId = m.GroupId,
+                        GroupName = m.Group.Name
+                    }
+                );
 
-        //    if (group == null)
-        //    {
-        //        return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No such group."));
-        //    }
+            return messages;
+        }
 
-        //    var messages = this.Data.Messages.All()
-        //        .Where(m => m.Group.Id == groupId)
-        //        .Select(m =>
-        //            new MessagesExportModel()
-        //            {
-        //                Id = m.Id,
-        //                MessageText = m.MessageText,
-        //                Time = m.Time,
-        //                UserId = m.UserId,
-        //                UserName = m.User.UserName,
-        //                GroupId = m.GroupId,
-        //                GroupName = m.Group.Name
-        //            }
-        //        )
-        //        .ToList();
+        public IQueryable<MessagesExportModel> GetLastByGroup(int groupId, int? count, int lastMessagesCount)
+        {
+            int messagesCount = count ?? lastMessagesCount;
 
-        //    if (!messages.Any())
-        //    {
-        //        return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No messages in this group."));
-        //    }
+            var messages = this.All()
+                .Where(m => m.Group.Id == groupId)
+                .OrderByDescending(m => m.Id)
+                .Take(messagesCount)
+                .Select(m =>
+                    new MessagesExportModel()
+                    {
+                        Id = m.Id,
+                        GroupId = m.GroupId,
+                        GroupName = m.Group.Name,
+                        MessageText = m.MessageText,
+                        Time = m.Time,
+                        UserId = m.UserId,
+                        UserName = m.User.UserName
+                    }
+                );
 
-        //    return this.Ok(messages);
-        //}
-
-        //[HttpGet]
-        //[Route("GetLastByGroup")]
-        //public IHttpActionResult GetLastByGroup([FromUri]int groupId, int? count)
-        //{
-        //    int messagesCount = count ?? LastMessagesCount;
-
-        //    var messages = this.Data.Messages.All()
-        //        .Where(m => m.Group.Id == groupId)
-        //        .OrderByDescending(m => m.Id)
-        //        .Take(messagesCount)
-        //        .Select(m =>
-        //            new MessagesExportModel()
-        //            {
-        //                Id = m.Id, 
-        //                GroupId = m.GroupId,
-        //                GroupName = m.Group.Name,
-        //                MessageText = m.MessageText, 
-        //                Time = m.Time, 
-        //                UserId = m.UserId,
-        //                UserName = m.User.UserName
-        //            }
-        //        )
-        //        .ToList();
-
-        //    if (!messages.Any())
-        //    {
-        //        return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No messages in this group."));
-        //    }
-
-        //    return this.Ok(messages);
-        //}
+            return messages;
+        }
 
         //// POST api/messages
         //[HttpPost]

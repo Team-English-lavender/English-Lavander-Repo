@@ -34,19 +34,7 @@
         [Route("GetAll")]
         public IHttpActionResult GetAll()
         {
-            var messages = this.Data.Messages.All().Select(m => 
-                    new MessagesExportModel()
-                    {
-                        Id = m.Id,
-                        UserId = m.UserId,
-                        UserName = m.User.UserName,
-                        GroupId = m.GroupId,
-                        GroupName = m.Group.Name,
-                        Time = m.Time,
-                        MessageText = m.MessageText
-                    }
-                )
-                .ToList();
+            var messages = this.Data.Messages.GetAll().ToList();
 
             if (!messages.Any())
             {
@@ -67,22 +55,7 @@
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No such group."));
             }
 
-            var messages = this.Data.Messages.All()
-                .Where(m => m.Group.Id == groupId)
-                .Select(m =>
-                    new MessagesExportModel()
-                    {
-                        Id = m.Id,
-                        MessageText = m.MessageText,
-                        Time = m.Time,
-                        UserId = m.UserId,
-                        UserName = m.User.UserName,
-                        GroupId = m.GroupId,
-                        GroupName = m.Group.Name
-                    }
-                )
-                .ToList();
-
+            var messages = this.Data.Messages.GetAllByGroupId(groupId);
             if (!messages.Any())
             {
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No messages in this group."));
@@ -97,27 +70,13 @@
         {
             int messagesCount = count ?? LastMessagesCount;
 
-            var messages = this.Data.Messages.All()
-                .Where(m => m.Group.Id == groupId)
-                .OrderByDescending(m => m.Id)
-                .Take(messagesCount)
-                .Select(m =>
-                    new MessagesExportModel()
-                    {
-                        Id = m.Id, 
-                        GroupId = m.GroupId,
-                        GroupName = m.Group.Name,
-                        MessageText = m.MessageText, 
-                        Time = m.Time, 
-                        UserId = m.UserId,
-                        UserName = m.User.UserName
-                    }
-                )
+            var messages = this.Data.Messages
+                .GetLastByGroup(groupId, count, LastMessagesCount)
                 .ToList();
-
             if (!messages.Any())
             {
-                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No messages in this group."));
+                return ResponseMessage(Request
+                    .CreateErrorResponse(HttpStatusCode.NotFound, "No messages in this group."));
             }
 
             return this.Ok(messages);
@@ -145,6 +104,7 @@
             
             this.Data.Messages.Add(newMessage);
             this.Data.SaveChanges();
+
             return this.Created("Message", newMessage);
         }
     }
