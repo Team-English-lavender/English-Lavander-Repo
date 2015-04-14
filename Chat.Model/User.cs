@@ -17,11 +17,14 @@ namespace Chat.Model
         {
             this.Groups = new HashSet<Group>();
             this.Messages = new HashSet<Message>();
+            this.Friends = new HashSet<Friend>();
         }
 
         public virtual ICollection<Group> Groups { get; set; }
 
         public virtual ICollection<Message> Messages { get; set; }
+
+        public virtual ICollection<Friend> Friends { get; set; } 
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User> manager, string authenticationType)
         {

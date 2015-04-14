@@ -17,6 +17,8 @@ namespace Chat.Data
 
         IMessagesRepository Messages { get; }
 
+        IRepository<Friend> Friends { get; } 
+
         int SaveChanges();
     }
 }

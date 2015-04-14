@@ -73,30 +73,5 @@
 
             return messages;
         }
-
-        //// POST api/messages
-        //[HttpPost]
-        //[Route("PostMessage")]
-        //public IHttpActionResult Post([FromBody]MessagesImportModel model)
-        //{
-        //    var currentUserId = this.User.Identity.GetUserId();
-
-        //    if (currentUserId == null)
-        //    {
-        //        return this.BadRequest("Not logged please logg in !");
-        //    }
-
-        //    Message newMessage = new Message()
-        //    {
-        //        MessageText = model.Text,
-        //        Time = DateTime.Now,
-        //        UserId = currentUserId,
-        //        GroupId = model.GroupId
-        //    };
-            
-        //    this.Data.Messages.Add(newMessage);
-        //    this.Data.SaveChanges();
-        //    return this.Created("Message", newMessage);
-        //}
     }
 }

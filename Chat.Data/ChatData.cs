@@ -43,6 +43,11 @@ namespace Chat.Data
             }
         }
 
+        public IRepository<Friend> Friends
+        {
+            get { return this.GetRepository<Friend>(); }
+        }
+
         public int SaveChanges()
         {
             return this.context.SaveChanges();

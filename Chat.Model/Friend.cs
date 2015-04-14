@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Chat.Data
+namespace Chat.Model
 {
-    class Program
+    public class Friend
     {
-        static void Main(string[] args)
-        {
-        }
+        public string Id { get; set; }
+
+        public string UserName { get; set; }
     }
 }

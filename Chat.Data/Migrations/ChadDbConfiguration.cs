@@ -25,6 +25,7 @@ namespace Chat.Data.Migrations
                     PasswordHash = "AOxyBrLsqTkOirMbW0OhW6D3kr3kysZmyOzJoelgiBZh2zmV2C6QG3F62aihRHKLUg=="
                 };
                 context.Users.Add(userOne);
+                Friend firstFriend = new Friend(){Id = userOne.Id, UserName = userOne.UserName};
                 User userTwo = new User()
                 {
                     UserName = "TheSecond",
@@ -32,6 +33,7 @@ namespace Chat.Data.Migrations
                     PasswordHash = "AOxyBrLsqTkOirMbW0OhW6D3kr3kysZmyOzJoelgiBZh2zmV2C6QG3F62aihRHKLUg=="
                 };
                 context.Users.Add(userTwo);
+                Friend secondFriend = new Friend(){Id = userTwo.Id, UserName = userTwo.UserName};
                 User userThree = new User()
                 {
                     UserName = "TheThird",
@@ -39,6 +41,9 @@ namespace Chat.Data.Migrations
                     PasswordHash = "AOxyBrLsqTkOirMbW0OhW6D3kr3kysZmyOzJoelgiBZh2zmV2C6QG3F62aihRHKLUg=="
                 };
                 context.Users.Add(userThree);
+                userThree.Friends.Add(firstFriend);
+                userThree.Friends.Add(secondFriend);
+                Friend thidrFriend = new Friend(){Id = userThree.Id, UserName = userThree.UserName};
                 User userFour = new User()
                 {
                     UserName = "TheFourth",
@@ -46,7 +51,9 @@ namespace Chat.Data.Migrations
                     PasswordHash = "AOxyBrLsqTkOirMbW0OhW6D3kr3kysZmyOzJoelgiBZh2zmV2C6QG3F62aihRHKLUg=="
                 };
                 context.Users.Add(userFour);
-
+                userFour.Friends.Add(firstFriend);
+                userFour.Friends.Add(secondFriend);
+                userFour.Friends.Add(thidrFriend);
                 Group groupOne = new Group()
                 {
                     Name = "The Group One",

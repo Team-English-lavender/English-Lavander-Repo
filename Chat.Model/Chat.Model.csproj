@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Friend.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Group.cs" />
     <Compile Include="Message.cs" />

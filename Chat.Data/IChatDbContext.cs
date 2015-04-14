@@ -21,6 +21,8 @@ namespace Chat.Data
 
         IDbSet<Group> Groups { get; set; }
 
+        IDbSet<Friend> Friends { get; set; } 
+
         int SaveChanges();
 
         DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
