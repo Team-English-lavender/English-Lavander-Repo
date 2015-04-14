@@ -17,6 +17,8 @@ namespace Chat.Client.Models
         [Display(Name = "Name")]
         public string Name { get; set; }
 
+        public bool IsPublic { get; set; }
+
         public virtual IEnumerable<UsersExportModel> Users { get; set; }
     }
 

@@ -91,7 +91,9 @@
 
             Group newGroup = new Group()
             {
-                Name = model.Name          
+                Name = model.Name,
+                IsPublic = model.IsPublic
+
             };
 
             this.Data.Groups.Add(newGroup);
