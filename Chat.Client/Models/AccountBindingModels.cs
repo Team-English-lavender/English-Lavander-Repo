@@ -34,7 +34,6 @@ namespace Chat.Client.Models
 
     public class RegisterBindingModel
     {
-        [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
@@ -49,6 +48,7 @@ namespace Chat.Client.Models
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
+        [Required]
         public string UserName { get; set; }
     }
 

@@ -19,8 +19,8 @@
             var confirmPass = $('#inputPasswordConfirm').val();
             var email = $('#inputEmail').val();
 
-            if (!name || !pass || !email) {
-                notify('warning', 'Please fill Username, password and email to register!');
+            if (!name || !pass) {
+                notify('warning', 'Please fill Username and passwort to register!');
                 return;
             }
             if (!confirmPass) {
