@@ -7,6 +7,11 @@
             registerClicked();
         });
 
+        $('#login').on('click', function (e) {
+            e.preventDefault();
+            loginClicked();
+        });
+
         /**************Rgistration*****************/
         function registerClicked() {
             var name = $('#inputUserName').val();
@@ -30,19 +35,39 @@
             ajaxRequester.register(name, pass, confirmPass, email,
                 function (data) {
                     authSuccess(data, 'register');
-                }, registerError);
+                }, requestError);
         }
+
+        /**************Login*****************/
+        function loginClicked() {
+            var uname = $('#inputUserName').val();
+            var upass = $('#inputPassword').val();
+
+            if (!uname || !upass) {
+                notify('warning', 'Enter both username and passward to login!');
+                return;
+            }
+
+            ajaxRequester.login(uname, upass,
+                function (data) {
+                    authSuccess(data, 'login');
+                },
+                requestError);
+        }
+
 
         function authSuccess(data, action) {
 
             if (action == 'login') {
+                console.log(data);
                 notify('success', 'Successfully logged in!');
             } else if (action == 'register') {
+                console.log(data);
                 notify('success', 'Registration successfull!');
             }
         }
 
-        function registerError(error) {
+        function requestError(error) {
             
             var errorText = $.parseJSON(error.responseText);
             var errorMsg = '';

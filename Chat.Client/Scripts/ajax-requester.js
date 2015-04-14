@@ -3,7 +3,7 @@
 var ajaxRequester = (function () {
 
     // baseUrl must be changed when deploying application
-    var baseUrl = "http://localhost:44965/api/";
+    var baseUrl = "http://localhost:44965/";
     var headers = {};
 
 
@@ -28,11 +28,18 @@ var ajaxRequester = (function () {
                 Email: email
             });
 
-        return makeRequest('POST', null, 'Account/Register', data, success, error);
+        return makeRequest('POST', null, 'api/Account/Register', data, success, error);
+    }
+
+    function login(username, password, success, error) {
+        var data = { Username: username, Password: password, grant_type: "password" };
+
+        return makeRequest('POST', null, 'token', data, success, error);
     }
 
     return {
-        register: register
+        register: register,
+        login: login
     };
 
 })();
