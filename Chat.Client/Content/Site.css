@@ -1,3 +1,16 @@
 ﻿.no-header-section {
     margin-top: 7em;
 }
+
+#logger-wrapper {
+    height: 150px;
+    overflow: auto;
+}
+
+    #logger-wrapper ul#mssgLogger {
+        padding-left: 20px;
+    }
+
+    #logger-wrapper ul#mssgLogger li {
+        list-style: none;
+    }
