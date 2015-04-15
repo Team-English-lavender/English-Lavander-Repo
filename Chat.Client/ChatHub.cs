@@ -21,6 +21,12 @@ namespace Chat.Client
 
             DateTime time = DateTime.Now;
             string format = "HH:mm:ss";
+
+            if (Context.User.Identity.Name != sender)
+            {
+                //the user in the client is different with the registered user
+                //Probably logout the user server side and client side
+            }
             Clients.All.broadCastMessage(time.ToString(format), sender, message);
         }
 
@@ -33,7 +39,7 @@ namespace Chat.Client
         {
             string mssg = "Left Chat";
 
-            this.SendMessage("Somebody ", mssg);
+            this.SendMessage(Context.User.Identity.Name, mssg);
 
             return base.OnDisconnected(stopCalled);
         }

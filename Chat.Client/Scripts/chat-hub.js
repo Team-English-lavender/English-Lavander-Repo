@@ -11,12 +11,11 @@
     });
 
 
-
     connection.start().done(function () {
         $('#send').click(function (e) {
             e.preventDefault();
 
-            var sender = $('#inputSender').val();
+            var sender = $('#textMessage').data('sender');
             var mssg = $('#textMessage').val();
 
             $('#textMessage').val('');

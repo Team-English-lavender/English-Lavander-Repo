@@ -21,10 +21,11 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, null)</li>
-                    <li>@Html.ActionLink("API", "Index", "Help", new { area = "" }, null)</li>
-                    <li>@Html.ActionLink("Login", "Login", "Home", new { area = "" }, null)</li>
-                    <li>@Html.ActionLink("Register", "Register", "Home", new { area = "" }, null)</li>
+                    <li class="general-link">@Html.ActionLink("Home", "Index", "Home", new { area = "" }, null)</li>
+                    <li class="visitor-link">@Html.ActionLink("Login", "Login", "Home", new { area = "" }, null)</li>
+                    <li class="visitor-link">@Html.ActionLink("Register", "Register", "Home", new { area = "" }, null)</li>
+                    <li class="general-link">@Html.ActionLink("API", "Index", "Help", new { area = "" }, null)</li>
+                    <li class="user-link"><a id="logout" href="#">Logout</a></li>
                 </ul>
             </div>
         </div>
@@ -33,7 +34,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Applicationsss</p>
+            <p>&copy; @DateTime.Now.Year - Lavander Chat</p>
         </footer>
     </div>
     <div class="modal"></div>

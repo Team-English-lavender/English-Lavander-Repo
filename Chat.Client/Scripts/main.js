@@ -2,6 +2,15 @@
 (function($){
     $(function () {
 
+        var currentSession = userSession.get();
+        if (currentSession) {
+            $('.visitor-link, .visitor-section').hide();
+            $('.user-link, .user-section').show();
+        } else {
+            $('.visitor-link, .visitor-section').show();
+            $('.user-link, .user-section').hide();
+        }
+
         $('#register').on('click', function (e) {
             e.preventDefault();
             registerClicked();
@@ -9,101 +18,159 @@
 
         $('#login').on('click', function (e) {
             e.preventDefault();
+            $('.visitor-link, .visitor-section').hide();
+            $('.user-link, .user-section').show();
+
             loginClicked();
         });
 
-        /**************Rgistration*****************/
-        function registerClicked() {
-            var name = $('#inputUserName').val();
-            var pass = $('#inputPassword').val();
-            var confirmPass = $('#inputPasswordConfirm').val();
-            var email = $('#inputEmail').val();
+        $('#logout').on('click', function (e) {
+            e.preventDefault();
+            $('.visitor-link, .visitor-section').show();
+            $('.user-link, .user-section').hide();
 
-            if (!name || !pass) {
-                notify('warning', 'Please fill Username and passwort to register!');
-                return;
-            }
-            if (!confirmPass) {
-                notify('error', 'Confirm Password!');
-                return;
-            }
-            if (confirmPass != pass) {
-                notify('error', 'Passwords must be identical!');
-                return;
-            }
+            logoutClicked();
+        });
+    });
 
-            ajaxRequester.register(name, pass, confirmPass, email,
-                function (data) {
-                    authSuccess(data, 'register');
-                }, requestError);
+    /**************Rgistration*****************/
+    function registerClicked() {
+        var name = $('#inputUserName').val();
+        var pass = $('#inputPassword').val();
+        var confirmPass = $('#inputPasswordConfirm').val();
+        var email = $('#inputEmail').val();
+
+        if (!name || !pass) {
+            notify('warning', 'Please fill Username and passwort to register!');
+            return;
+        }
+        if (!confirmPass) {
+            notify('error', 'Confirm Password!');
+            return;
+        }
+        if (confirmPass != pass) {
+            notify('error', 'Passwords must be identical!');
+            return;
         }
 
-        /**************Login*****************/
-        function loginClicked() {
-            var uname = $('#inputUserName').val();
-            var upass = $('#inputPassword').val();
+        ajaxRequester.register(name, pass, confirmPass, email,
+            function (data) {
+                authSuccess(data, 'register');
+            },
+            function (data) {
+                requestError(data, 'register');
+            });
+    }
 
-            if (!uname || !upass) {
-                notify('warning', 'Enter both username and passward to login!');
-                return;
-            }
+    /**************Login*****************/
+    function loginClicked() {
+        var uname = $('#inputUserName').val();
+        var upass = $('#inputPassword').val();
 
-            ajaxRequester.login(uname, upass,
-                function (data) {
-                    authSuccess(data, 'login');
-                },
-                requestError);
+        if (!uname || !upass) {
+            notify('warning', 'Enter both username and passward to login!');
+            return;
         }
 
+        ajaxRequester.login(uname, upass,
+            function (data) {
+                authSuccess(data, 'login');
+                redirectToHome();
+            },
+            function (data) {
+                requestError(data, 'login');
+            });
+    }
 
-        function authSuccess(data, action) {
 
-            if (action == 'login') {
-                console.log(data);
-                notify('success', 'Successfully logged in!');
-            } else if (action == 'register') {
-                console.log(data);
-                notify('success', 'Registration successfull!');
-            }
+    function logoutClicked() {
+        authSuccess(null, 'logout');
+        redirectToHome();
+
+        //ajaxRequester.logout(
+        //    function (data) {
+        //        authSuccess(data, 'logout');
+        //        redirectToHome();
+        //    },
+        //    function (data) {
+        //        requestError(data, 'logout');
+        //});
+    }
+
+
+    /********Respose Callbacks************/
+    function authSuccess(data, action) {
+        var mssg = '';
+
+        if (action == 'login') {
+            userSession.save(data);
+            mssg = 'Successfully logged in!';
+        } else if (action == 'register') {
+            mssg = 'Registration successfull';
+        } else if (action == 'logout') {
+            userSession.clear();
+            mssg = 'Successfully logged out.';
         }
 
-        function requestError(error) {
-            
-            var errorText = $.parseJSON(error.responseText);
-            var errorMsg = '';
+        notify('success', mssg);
+    }
 
+    function requestError(error, action) {
+        console.log(error);
+        var errorText = $.parseJSON(error.responseText);
+        console.log(errorText);
+        var errorMsg = '';
+        
+        if (action == 'register') {
             for (var prop in errorText.ModelState) {
                 errorMsg += errorText.ModelState[prop] + '<br />';
             }
-            console.log(errorText);
-            notify('error', errorMsg);
+        } else if (action == 'login') {
+            errorMsg = errorText.error_description;
+        } else if (action == 'logout') {
+            //add error message
         }
 
-        /********Notifications************/
-        function notify(type, msg) {
-            var timeout = (type == 'success') ? 2000 : 8000;
-            noty({
-                text: msg,
-                type: type,
-                layout: 'topCenter',
-                timeout: timeout
-            });
+        notify('error', errorMsg);
+    }
+
+    /********Notifications************/
+    function notify(type, msg) {
+        var timeout = (type == 'success') ? 500 : 1000;
+        noty({
+            text: msg,
+            type: type,
+            layout: 'topCenter',
+            timeout: timeout
+        });
+    }
+
+    function redirectToHome(delay, redirectURL) {
+        var timeOfDelay = delay || 600;
+        var destination = location.protocol + '//' + location.host + '/';
+        if(redirectURL) {
+            destination += redirectURL;
         }
+        console.log(timeOfDelay);
+        setTimeout(function () {
+            window.location = destination;
+        }, timeOfDelay);
+    }
 
-        /*********** Waiting Action ***********/
-        $(document).ajaxStart(function () {
-            $('body').addClass("loading");
-        });
+    /*********** Waiting Action ***********/
+    $(document).ajaxStart(function () {
+        $('body').addClass("loading");
+    });
 
-        $(document).ajaxStop(function() {
-            $('body').removeClass("loading");
-        });
+    $(document).ajaxStop(function() {
+        $('body').removeClass("loading");
+    });
 
-        /************ After Login Load *************/
+    /************ After Login Load *************/
 
-        var successfullLogin = (function() {
+    var successfullLogin = (function() {
 
-        });
+    });
 
     });
 })(jQuery);

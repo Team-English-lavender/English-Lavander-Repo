@@ -39,9 +39,15 @@ var ajaxRequester = (function () {
         return makeRequest('POST', null, 'token', data, success, error);
     }
 
+    // Do we need token for that request
+    function logout(success, error) {
+        return makeRequest('POST', null, 'api/Account/Logout', null, success, error);
+    }
+
     return {
         register: register,
-        login: login
+        login: login,
+        logout: logout
     };
 
 })();
