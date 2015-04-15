@@ -39,14 +39,14 @@
         $('#groupsListBtn').click(function(e) {
             e.preventDefault();
             loadGroups();
+        });
 
-            $('#retrieveMessagesByGidLimited').on('click', function() {
-                retrieveMessagesbyGidClicked('limited');
-            });
+        $('#retrieveMessagesByGidLimited').on('click', function () {
+            retrieveMessagesbyGidClicked('limited');
+        });
 
-            $('#retrieveMessageByGidsAll').on('click', function() {
-                retrieveMessagesbyGidClicked('all');
-            });
+        $('#retrieveMessageByGidsAll').on('click', function () {
+            retrieveMessagesbyGidClicked('all');
         });
 
         /**************Rgistration*****************/
@@ -203,7 +203,7 @@
                         listLoader(data, 'groupsList');
                         return;
                     }
-                    notify('error', "No groups currently.");
+                    utilities.notify('error', "No groups currently.");
                 },
                 function(data) {
                     var a = data;
@@ -220,7 +220,7 @@
                         listLoader(data, 'friendsList');
                         return;
                     }
-                    notify('error', 'No friends currently.');
+                    utilities.notify('error', 'No friends currently.');
                 },
                 function(data) {
 
