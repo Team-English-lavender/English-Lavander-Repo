@@ -31,6 +31,14 @@
 
             logoutClicked();
         });
+
+        $('#retrieveMessagesByGidLimited').on('click', function () {
+            retrieveMessagesbyGidClicked('limited');
+        });
+
+        $('#retrieveMessageByGidsAll').on('click', function () {
+            retrieveMessagesbyGidClicked('all');
+        });
     });
 
     /**************Rgistration*****************/
@@ -97,8 +105,43 @@
         //});
     }
 
+    function retrieveMessagesbyGidClicked(type) {
+        var currentSession = userSession.get();
+        // Get dynamically the group Id
+        var groupId = 1;
 
-    /********Respose Callbacks************/
+        if (type == 'limited') {
+            ajaxRequester.retrieveMessagesByGidLimited(currentSession.access_token, groupId,
+                function (data) {
+                    var html = '';
+                    $.each(data, function (key, value) {
+                        html += '<li><small>[' + value.Time + '] <strong>' + value.UserName + '</strong>:</small> ' + value.MessageText + '</li>';
+                    });
+                    $('#mssgLogger').append(html);
+                },
+                function (data) {
+                    utilities.notify('error', 'Sorry, could not retrieve your history');
+                }
+            )
+        } else if (type == 'all') {
+            ajaxRequester.retrieveMessagesByGidAll(currentSession.access_token, groupId,
+                function (data) {
+                    var html = '';
+                    $.each(data, function (key, value) {
+                        html += '<li><small>[' + value.Time + '] <strong>' + value.UserName + '</strong>:</small> ' + value.MessageText + '</li>';
+                    });
+                    $('#mssgLogger').append(html);
+                },
+                function (data) {
+                    utilities.notify('error', 'Sorry, could not retrieve your full history');
+                }
+            )
+        }
+
+        $("#logger-wrapper").animate({ scrollTop: $("#logger-wrapper").prop("scrollHeight") }, 100);
+    }
+
+    /********Response Callbacks************/
     function authSuccess(data, action) {
         var mssg = '';
 

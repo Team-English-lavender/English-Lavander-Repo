@@ -52,11 +52,27 @@ var ajaxRequester = (function () {
         return makeRequest('POST', headers, 'api/Messages/PostMessage', data, success, error);
     }
 
+    // Gid stands for group id
+    function retrieveMessagesByGidLimited(sessionToken, groupId, success, error, count) {
+        headers['Authorization'] = 'Bearer ' + sessionToken;
+        var countParam = (count) ? '&count=' + count : '&count=';
+
+        return makeRequest('GET', headers, 'api/Messages/GetLastByGroup?groupId=' + groupId + countParam, null, success, error);
+    }
+
+    function retrieveMessagesByGidAll(sessionToken, groupId, success, error) {
+        headers['Authorization'] = 'Bearer ' + sessionToken;
+
+        return makeRequest('GET', headers, 'api/Messages/GetAllByGroup?groupId=' + groupId, null, success, error);
+    }
+
     return {
         register: register,
         login: login,
         logout: logout,
-        postMessage: postMessage
+        postMessage: postMessage,
+        retrieveMessagesByGidAll: retrieveMessagesByGidAll,
+        retrieveMessagesByGidLimited: retrieveMessagesByGidLimited
     };
 
 })();

@@ -1,6 +1,12 @@
 ﻿'use strict';
 var utilities = (function () {
 
+    var tagsToReplace = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;'
+    };
+
     /********Notifications************/
     function notify(type, msg) {
         var timeout = (type == 'success') ? 500 : 1000;
@@ -24,9 +30,18 @@ var utilities = (function () {
         }, timeOfDelay);
     }
 
+    function replaceTag(tag) {
+        return tagsToReplace[tag] || tag;
+    }
+
+    function safeTagsReplace(str) {
+        return str.replace(/[&<>]/g, replaceTag);
+    }
+
     return {
         notify: notify,
-        redirectToHome: redirectToHome
+        redirectToHome: redirectToHome,
+        replaceTags: safeTagsReplace
     };
 
 })();

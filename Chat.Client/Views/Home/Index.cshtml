@@ -16,16 +16,14 @@
     <div class="row">
         <div class="col-md-2">
             <div class="well">
-                <h3>Friends List</h3>
-                <p></p>
-                <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301870">Learn more &raquo;</a>
-                </p>
+                <h4>Friends List</h4>
+                <hr>
+                <p><a class="btn btn-default" href="#">Load Friends</a></p>
             </div>
             <div class="well">
-                <h3>Groups List</h3>
-                <p></p>
-                <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301872">Learn more &raquo;</a>
-                </p>
+                <h4>Groups List</h4>
+                <hr>
+                <p><a class="btn btn-default" href="#">Load Groups</a></p>
             </div>
         </div>
         <div class="col-md-6 col-md-offset-1">
@@ -47,12 +45,20 @@
                         </div>
                         <div class="form-group">
                             <div class="col-lg-10 col-lg-offset-2">
-                                <button id="send" type="submit" class="btn btn-primary">Submit</button>
+                                <button id="send" type="submit" class="btn btn-primary btn-lg">Submit</button>
                             </div>
                         </div>
                     </fieldset>
                 </form>
             </div>
+        </div>
+        <div class="col-md-2 col-md-offset-1 well">
+            <h4>Chat history</h4>
+            <hr>
+            <button id="retrieveMessagesByGidLimited" class="btn btn-default" type="button">Retrieve [3]</button>
+            <br />
+            <br />
+            <button id="retrieveMessageByGidsAll" class="btn btn-success" type="button">Retrieve ALL</button>
         </div>
     </div>
 </div>

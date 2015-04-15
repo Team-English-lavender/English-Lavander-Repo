@@ -17,7 +17,7 @@
                 e.preventDefault();
 
                 var sender = $('#textMessage').data('sender');
-                var mssg = $('#textMessage').val();
+                var mssg = utilities.replaceTags($('#textMessage').val());
                 // must retrieve group id dynamically
                 var groupId = 1;
 
