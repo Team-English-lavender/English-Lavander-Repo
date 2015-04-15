@@ -166,11 +166,4 @@
         $('body').removeClass("loading");
     });
 
-    /************ After Login Load *************/
-
-    var successfullLogin = (function() {
-
-    });
-
-    });
 })(jQuery);
