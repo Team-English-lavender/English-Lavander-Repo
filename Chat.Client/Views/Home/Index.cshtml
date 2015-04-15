@@ -1,4 +1,18 @@
-﻿<div class="container-fluid no-header-section">
+﻿<div class="container-fluid visitor-section">
+    <div class="row">
+        <div class="jumbotron">
+            <h1>Welcome to Lavender Chat</h1>
+            <p class="lead">Join the fun of chatting</p>
+            <p>
+                <a href="http://localhost:44965/Home/Login" class="btn btn-primary btn-lg">Login</a>
+                <a href="http://localhost:44965/Home/Register" class="btn btn-default btn-lg">Register</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid no-header-section user-section">
     <div class="row">
         <div class="col-md-2">
             <div class="well">
@@ -30,9 +44,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="textMessage" class="col-lg-2 control-label">Textarea</label>
+                            <label for="textMessage" class="col-lg-2 control-label">Message</label>
                             <div class="col-lg-10">
-                                <textarea class="form-control" rows="3" id="textMessage"></textarea>
+                                <textarea class="form-control" rows="3" id="textMessage" data-sender="@Context.User.Identity.Name"></textarea>
                             </div>
                         </div>
                         <div class="form-group">
