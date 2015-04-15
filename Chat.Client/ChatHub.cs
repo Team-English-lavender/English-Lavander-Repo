@@ -22,6 +22,8 @@ namespace Chat.Client
             DateTime time = DateTime.Now;
             string format = "HH:mm:ss";
 
+
+
             if (Context.User.Identity.Name != sender)
             {
                 //the user in the client is different with the registered user
