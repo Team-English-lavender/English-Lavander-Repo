@@ -41,15 +41,15 @@
         var email = $('#inputEmail').val();
 
         if (!name || !pass) {
-            notify('warning', 'Please fill Username and passwort to register!');
+            utilities.notify('warning', 'Please fill Username and passwort to register!');
             return;
         }
         if (!confirmPass) {
-            notify('error', 'Confirm Password!');
+            utilities.notify('error', 'Confirm Password!');
             return;
         }
         if (confirmPass != pass) {
-            notify('error', 'Passwords must be identical!');
+            utilities.notify('error', 'Passwords must be identical!');
             return;
         }
 
@@ -68,14 +68,14 @@
         var upass = $('#inputPassword').val();
 
         if (!uname || !upass) {
-            notify('warning', 'Enter both username and passward to login!');
+            utilities.notify('warning', 'Enter both username and passward to login!');
             return;
         }
 
         ajaxRequester.login(uname, upass,
             function (data) {
                 authSuccess(data, 'login');
-                redirectToHome();
+                utilities.redirectToHome();
             },
             function (data) {
                 requestError(data, 'login');
@@ -85,12 +85,12 @@
 
     function logoutClicked() {
         authSuccess(null, 'logout');
-        redirectToHome();
+        utilities.redirectToHome();
 
         //ajaxRequester.logout(
         //    function (data) {
         //        authSuccess(data, 'logout');
-        //        redirectToHome();
+        //        utilities.redirectToHome();
         //    },
         //    function (data) {
         //        requestError(data, 'logout');
@@ -112,7 +112,7 @@
             mssg = 'Successfully logged out.';
         }
 
-        notify('success', mssg);
+        utilities.notify('success', mssg);
     }
 
     function requestError(error, action) {
@@ -131,30 +131,7 @@
             //add error message
         }
 
-        notify('error', errorMsg);
-    }
-
-    /********Notifications************/
-    function notify(type, msg) {
-        var timeout = (type == 'success') ? 500 : 1000;
-        noty({
-            text: msg,
-            type: type,
-            layout: 'topCenter',
-            timeout: timeout
-        });
-    }
-
-    function redirectToHome(delay, redirectURL) {
-        var timeOfDelay = delay || 600;
-        var destination = location.protocol + '//' + location.host + '/';
-        if(redirectURL) {
-            destination += redirectURL;
-        }
-        console.log(timeOfDelay);
-        setTimeout(function () {
-            window.location = destination;
-        }, timeOfDelay);
+        utilities.notify('error', errorMsg);
     }
 
     /*********** Waiting Action ***********/
@@ -165,7 +142,4 @@
     $(document).ajaxStop(function() {
         $('body').removeClass("loading");
     });
-    //alsjkdhsdjkvhsdkvjhbsdkjhvbkjdmhbv
-    //sdfjhvbsdfkjmhvbfsdkjhbvfsdkjmhvbsfdk
-    //sldfkjvfsdljkvbdlfjkvndsfjv
 })(jQuery);

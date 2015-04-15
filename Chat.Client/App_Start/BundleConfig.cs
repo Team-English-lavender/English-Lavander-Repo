@@ -23,6 +23,7 @@ namespace Chat.Client
 
             bundles.Add(new ScriptBundle("~/bundles/custom").Include(
                       "~/Scripts/ajax-requester.js",
+                      "~/Scripts/utilities.js",
                       "~/Scripts/userSession.js",
                       "~/Scripts/main.js"));
 

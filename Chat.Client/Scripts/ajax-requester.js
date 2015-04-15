@@ -45,10 +45,18 @@ var ajaxRequester = (function () {
         return makeRequest('POST', null, 'api/Account/Logout', null, success, error);
     }
 
+    function postMessage(sessionToken, mssg, groupId, success, error) {
+        var data = JSON.stringify({ Text: mssg, GroupId: groupId });
+        headers['Authorization'] = 'Bearer ' + sessionToken;
+
+        return makeRequest('POST', headers, 'api/Messages/PostMessage', data, success, error);
+    }
+
     return {
         register: register,
         login: login,
-        logout: logout
+        logout: logout,
+        postMessage: postMessage
     };
 
 })();
