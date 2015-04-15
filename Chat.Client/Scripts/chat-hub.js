@@ -1,6 +1,5 @@
 ﻿'use strict';
 (function($){
-    $(function () {
         var connection = $.hubConnection();
         var hub = connection.createHubProxy('chatHub');
 
@@ -27,5 +26,4 @@
 
             });
         });
-    });
 })(jQuery);
