@@ -39,12 +39,6 @@
                     <fieldset>
                         <legend>Chat Area</legend>
                         <div class="form-group">
-                            <label for="inputSender" class="col-lg-2 control-label">Sender</label>
-                            <div class="col-lg-10">
-                                <input class="form-control" id="inputSender" placeholder="Sender" type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label for="textMessage" class="col-lg-2 control-label">Message</label>
                             <div class="col-lg-10">
                                 <textarea class="form-control" rows="3" id="textMessage" data-sender="@Context.User.Identity.Name"></textarea>
@@ -52,12 +46,20 @@
                         </div>
                         <div class="form-group">
                             <div class="col-lg-10 col-lg-offset-2">
-                                <button id="send" type="submit" class="btn btn-primary">Submit</button>
+                                <button id="send" type="submit" class="btn btn-primary btn-lg">Submit</button>
                             </div>
                         </div>
                     </fieldset>
                 </form>
             </div>
+        </div>
+        <div class="col-md-2 col-md-offset-1 well">
+            <h4>Chat history</h4>
+            <hr>
+            <button id="retrieveMessagesByGidLimited" class="btn btn-default" type="button">Retrieve [3]</button>
+            <br />
+            <br />
+            <button id="retrieveMessageByGidsAll" class="btn btn-success" type="button">Retrieve ALL</button>
         </div>
     </div>
 </div>

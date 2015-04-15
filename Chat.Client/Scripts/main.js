@@ -39,6 +39,13 @@
         $('#groupsListBtn').click(function (e) {
             e.preventDefault();
             loadGroups();
+
+        $('#retrieveMessagesByGidLimited').on('click', function () {
+            retrieveMessagesbyGidClicked('limited');
+        });
+
+        $('#retrieveMessageByGidsAll').on('click', function () {
+            retrieveMessagesbyGidClicked('all');
         });
     });
 
@@ -50,15 +57,15 @@
         var email = $('#inputEmail').val();
 
         if (!name || !pass) {
-            notify('warning', 'Please fill Username and passwort to register!');
+            utilities.notify('warning', 'Please fill Username and passwort to register!');
             return;
         }
         if (!confirmPass) {
-            notify('error', 'Confirm Password!');
+            utilities.notify('error', 'Confirm Password!');
             return;
         }
         if (confirmPass != pass) {
-            notify('error', 'Passwords must be identical!');
+            utilities.notify('error', 'Passwords must be identical!');
             return;
         }
 
@@ -77,14 +84,14 @@
         var upass = $('#inputPassword').val();
 
         if (!uname || !upass) {
-            notify('warning', 'Enter both username and passward to login!');
+            utilities.notify('warning', 'Enter both username and passward to login!');
             return;
         }
 
         ajaxRequester.login(uname, upass,
             function (data) {
                 authSuccess(data, 'login');
-                redirectToHome();
+                utilities.redirectToHome();
             },
             function (data) {
                 requestError(data, 'login');
@@ -94,20 +101,55 @@
 
     function logoutClicked() {
         authSuccess(null, 'logout');
-        redirectToHome();
+        utilities.redirectToHome();
 
         //ajaxRequester.logout(
         //    function (data) {
         //        authSuccess(data, 'logout');
-        //        redirectToHome();
+        //        utilities.redirectToHome();
         //    },
         //    function (data) {
         //        requestError(data, 'logout');
         //});
     }
 
+    function retrieveMessagesbyGidClicked(type) {
+        var currentSession = userSession.get();
+        // Get dynamically the group Id
+        var groupId = 1;
 
-    /********Respose Callbacks************/
+        if (type == 'limited') {
+            ajaxRequester.retrieveMessagesByGidLimited(currentSession.access_token, groupId,
+                function (data) {
+                    var html = '';
+                    $.each(data, function (key, value) {
+                        html += '<li><small>[' + value.Time + '] <strong>' + value.UserName + '</strong>:</small> ' + value.MessageText + '</li>';
+                    });
+                    $('#mssgLogger').append(html);
+                },
+                function (data) {
+                    utilities.notify('error', 'Sorry, could not retrieve your history');
+                }
+            )
+        } else if (type == 'all') {
+            ajaxRequester.retrieveMessagesByGidAll(currentSession.access_token, groupId,
+                function (data) {
+                    var html = '';
+                    $.each(data, function (key, value) {
+                        html += '<li><small>[' + value.Time + '] <strong>' + value.UserName + '</strong>:</small> ' + value.MessageText + '</li>';
+                    });
+                    $('#mssgLogger').append(html);
+                },
+                function (data) {
+                    utilities.notify('error', 'Sorry, could not retrieve your full history');
+                }
+            )
+        }
+
+        $("#logger-wrapper").animate({ scrollTop: $("#logger-wrapper").prop("scrollHeight") }, 100);
+    }
+
+    /********Response Callbacks************/
     function authSuccess(data, action) {
         var mssg = '';
 
@@ -121,7 +163,7 @@
             mssg = 'Successfully logged out.';
         }
 
-        notify('success', mssg);
+        utilities.notify('success', mssg);
     }
 
     function requestError(error, action) {
@@ -140,30 +182,7 @@
             //add error message
         }
 
-        notify('error', errorMsg);
-    }
-
-    /********Notifications************/
-    function notify(type, msg) {
-        var timeout = (type == 'success') ? 500 : 1000;
-        noty({
-            text: msg,
-            type: type,
-            layout: 'topCenter',
-            timeout: timeout
-        });
-    }
-
-    function redirectToHome(delay, redirectURL) {
-        var timeOfDelay = delay || 600;
-        var destination = location.protocol + '//' + location.host + '/';
-        if(redirectURL) {
-            destination += redirectURL;
-        }
-        console.log(timeOfDelay);
-        setTimeout(function () {
-            window.location = destination;
-        }, timeOfDelay);
+        utilities.notify('error', errorMsg);
     }
 
     /*********** Waiting Action ***********/
@@ -215,5 +234,4 @@
     });
 
     // ::::::::  Load Groups Messages :::::::::
-
 })(jQuery);

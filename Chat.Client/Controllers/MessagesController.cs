@@ -16,7 +16,7 @@
     [RoutePrefix("api/Messages")]
     public class MessagesController : BaseController
     {
-        private const int LastMessagesCount = 20;
+        private const int LastMessagesCount = 3;
 
         public MessagesController()
             : this (new ChatData(new ChatDbContext()))
