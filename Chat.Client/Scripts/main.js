@@ -90,5 +90,20 @@
             });
         }
 
+        /*********** Waiting Action ***********/
+        $(document).ajaxStart(function () {
+            $('body').addClass("loading");
+        });
+
+        $(document).ajaxStop(function() {
+            $('body').removeClass("loading");
+        });
+
+        /************ After Login Load *************/
+
+        var successfullLogin = (function() {
+
+        });
+
     });
 })(jQuery);
