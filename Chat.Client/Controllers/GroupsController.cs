@@ -6,6 +6,7 @@
     using System.Web.Http;
 
     using Data;
+    using Microsoft.AspNet.Identity;
     using Models;
 
     [Authorize]
@@ -51,9 +52,10 @@
         }
 
         [HttpGet]
-        [Route("GetByUserId")]
-        public IHttpActionResult GetByUserId([FromUri]string userId)
+        [Route("GetUserGroups")]
+        public IHttpActionResult GetUserGroups()
         {
+            var userId = this.User.Identity.GetUserId();
             var groups = this.Data.Groups.All()
                 .Where(g => g.Users.Any(u => u.Id == userId))
                 .Select(g =>

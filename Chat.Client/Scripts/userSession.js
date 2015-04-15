@@ -5,6 +5,11 @@ var userSession = (function () {
         localStorage['currentUser'] = JSON.stringify(data);
     }
 
+    function addData(newData) {
+        var data = JSON.parse(localStorage['currentUser']);
+        console.log();
+    }
+
     function getSession() {
         var userData = localStorage['currentUser'];
         if (userData) {
@@ -19,6 +24,7 @@ var userSession = (function () {
     return {
         save: saveSession,
         get: getSession,
+        add: addData,
         clear: clearSession
     };
 

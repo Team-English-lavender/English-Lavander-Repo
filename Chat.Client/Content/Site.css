@@ -40,3 +40,19 @@ body.loading {
 body.loading .modal {
     display: block;
 }
+
+#groupsList > ul, #friendsList > ul {
+    list-style: none;
+    width: 100%;
+    padding: 3px;
+}
+
+#groupsList > ul li, #friendsList > ul li{
+    margin: 2px;
+    padding: 2px;
+}
+
+#groupsList > ul li:hover, #friendsList > ul li:hover{
+    background-color: #D9D9D9;
+    cursor: pointer;
+}

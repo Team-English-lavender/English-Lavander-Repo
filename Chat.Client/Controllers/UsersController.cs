@@ -147,5 +147,29 @@
 
             return this.Ok(friends);
         }
+
+        [HttpGet]
+        [Route("GetCurrentUser")]
+        public IHttpActionResult GetCurrentUser()
+        {
+
+          
+            var userId = this.User.Identity.GetUserId();
+
+            var user = this.Data.Users.All().Where(u => u.Id == userId).FirstOrDefault();
+
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            UsersExportModel exportUser = new UsersExportModel()
+            {
+                Id = user.Id,
+                UserName = user.UserName
+            };
+
+            return this.Ok(exportUser);
+        }
     }
 }

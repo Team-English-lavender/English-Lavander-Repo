@@ -1,7 +1,7 @@
 ﻿'use strict';
 (function($){
     $(function () {
-
+        
         var currentSession = userSession.get();
         if (currentSession) {
             $('.visitor-link, .visitor-section').hide();
@@ -30,6 +30,15 @@
             $('.user-link, .user-section').hide();
 
             logoutClicked();
+        });
+        
+        $('#friendsListBtn').click(function(e) {
+            e.preventDefault();
+            loadFriends();
+        });
+        $('#groupsListBtn').click(function (e) {
+            e.preventDefault();
+            loadGroups();
         });
     });
 
@@ -165,7 +174,46 @@
     $(document).ajaxStop(function() {
         $('body').removeClass("loading");
     });
-    //alsjkdhsdjkvhsdkvjhbsdkjhvbkjdmhbv
-    //sdfjhvbsdfkjmhvbfsdkjhbvfsdkjmhvbsfdk
-    //sldfkjvfsdljkvbdlfjkvndsfjv
+
+    //:::::::::: Load User Groups, Friends  ::::::::::::::
+    var loadGroups = (function() {
+        var token = userSession.get().access_token;
+        loadRequester.loadGroups(token,
+            function(data) {
+                if (data.length > 1) {
+                    listLoader(data, 'groupsList');
+                    return;
+                }
+                notify('error', "No groups currently.");
+            },
+            function(data) {
+                var a = data;
+                console.log(data);
+            }
+        );
+    });
+
+    var loadFriends = (function () {
+        var token = userSession.get().access_token;
+        loadRequester.loadFriends(token,
+            function (data) {
+                if (data.length > 1) {
+                    listLoader(data, 'friendsList');
+                    return;
+                }
+                notify('error', 'No friends currently.');
+            },
+            function (data) {
+
+            });
+    });
+
+    var listLoader = (function (objects, parentId) {
+        for (var i = 0; i < objects.length; i++) {
+            $('#' + parentId + '> ul').append('<li>' +objects[i].Name+ '</li>').data('Id', objects[i].Id);
+        }
+    });
+
+    // ::::::::  Load Groups Messages :::::::::
+
 })(jQuery);

@@ -10,10 +10,11 @@ using System.Globalization;
 
 namespace Chat.Client
 {
+    using Data;
+
     [HubName("chatHub")]
     public class ChatHub : Hub
     {
-
         //Sender will be replaced with the username of the logged in user
         public void SendMessage(string sender, string message)
         {
@@ -21,8 +22,7 @@ namespace Chat.Client
 
             DateTime time = DateTime.Now;
             string format = "HH:mm:ss";
-
-
+            
 
             if (Context.User.Identity.Name != sender)
             {

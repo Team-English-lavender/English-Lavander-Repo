@@ -24,7 +24,8 @@ namespace Chat.Client
             bundles.Add(new ScriptBundle("~/bundles/custom").Include(
                       "~/Scripts/ajax-requester.js",
                       "~/Scripts/userSession.js",
-                      "~/Scripts/main.js"));
+                      "~/Scripts/main.js",
+                      "~/Scripts/load-requester.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/signalR").Include(
                       "~/Scripts/jquery.signalR-2.2.0.js",
