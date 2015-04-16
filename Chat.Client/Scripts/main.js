@@ -287,7 +287,8 @@
                     }
                     utilities.notify('info', 'No friends currently.');
                 },
-                function(data) {
+                function (data) {
+                    var d = data;
                     utilities.notify('error', 'Sorry, could not retrieve your friends, try later.');
                 });
         });

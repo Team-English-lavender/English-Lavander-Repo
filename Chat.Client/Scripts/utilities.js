@@ -65,8 +65,8 @@ var utilities = (function() {
     var listLoaderUser = (function (objects, parentId) {
         var $item = $('#' + parentId + '> ul').html('');
         for (var i = 0; i < objects.length; i++) {
-            $item.append($('<li class="lists" data-id="' + objects[i].Id +
-                        '">' + objects[i].UserName + '</li>')
+            $item.append($('<li class="lists" data-id="' + objects[0][i].Id +
+                        '">' + objects[0][i].UserName + '</li>')
                     .click(function () {
                         var id = $(this).data("id");
                         var name = $(this).text();
@@ -78,7 +78,8 @@ var utilities = (function() {
     var selectLoader = (function (objects, parentId) {
         var $item = $('#' + parentId).html('');
         for (var i = 0; i < objects.length; i++) {
-            $item.append($('<option class="lists" data-id="' + objects[i].Id +
+            var o = objects[i][0];
+            $item.append($('<option class="lists" data-id="' + objects[i].Id+
                         '">' + objects[i].UserName + '</option>')
                     .click(function () {
                         var id = $(this).data("id");

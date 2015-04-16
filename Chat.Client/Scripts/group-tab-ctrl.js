@@ -23,14 +23,15 @@ var groupProcess = (function() {
         var token = userSession.get().access_token;
         // sessionToken, userName, userId, success, error
         ajaxRequester.addUserToFriends(token, userName, userId,
-            function (data, statusText, xhr) {
-
-                if (xhr.status == 200) {
-                    utilities.notify('info', 'User added to friends.');
-                }
+            function (data) {
+                utilities.notify('info', 'User added to friends.');
             },
             function (data) {
-                utilities.notify('error', 'It is not posibile to add user.');
+                if (data.status !== 500) {
+                    utilities.notify('info', data.responseText);
+                    return;
+                }
+                utilities.notify('error', "Server error, please try later.");
             }, null);
     }
                 
