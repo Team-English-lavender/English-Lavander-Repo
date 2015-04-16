@@ -37,9 +37,9 @@
                     ajaxRequester.postMessage(token, mssg, group.id,
                         function (data) {
                             console.log(data);
-                            //hub.invoke('joinRoom', group.name);
-                            hub.invoke('sendMessage', sender, mssg);
-                            //hub.invoke("sendMessageToGroup", user, mssg, group.name);
+                            hub.invoke('joinRoom', group.name);
+                            //hub.invoke('sendMessage', sender, mssg);
+                            hub.invoke("sendMessageToGroup", user, mssg, group.name);
                            
                             $("#logger-wrapper").animate({ scrollTop: $("#logger-wrapper").prop("scrollHeight") }, 100);
                         },

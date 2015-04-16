@@ -16,7 +16,7 @@ namespace Chat.Client
     [HubName("chatHub")]
     public class ChatHub : Hub
     {
-        private IChatData data = new ChatData(new ChatDbContext());
+
         //Sender will be replaced with the username of the logged in user
         public void SendMessage(string sender, string message, int groupId)
         {
@@ -49,8 +49,6 @@ namespace Chat.Client
 
         public void SendMessageToGroup(string sender, string message, string groupName)
         {
-            //var group = this.data.Groups.All().Where(g => g.Id == groupId).FirstOrDefault();
-
             Clients.Group(groupName).broadCastMessage(DateTime.Now, sender, message);
         }
 
