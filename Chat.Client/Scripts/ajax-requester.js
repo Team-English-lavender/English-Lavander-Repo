@@ -70,6 +70,27 @@ var ajaxRequester = (function () {
         headers['Authorization'] = 'Bearer ' + sessionToken;
         return makeRequest('GET', headers, 'api/Users/GetCurrentUser', null, success, error);
     }
+
+    function postGroup(sessionToken, name, userId, userName, success, error) {
+        var data = JSON.stringify(
+            {
+                Name: name,
+                IsPublic: true,
+                //Users: [{ Id: userId, UserName: userName }]
+            });
+
+        headers['Authorization'] = 'Bearer ' + sessionToken;
+
+        return makeRequest('POST', headers, 'api/Groups/CreateGroup', data, success, error);
+    }
+
+    function addUserToGroup(sessionToken, groupId, userId, success, error) {
+        var data = JSON.stringify({ UserId: userId, GroupId: groupId });
+
+        headers['Authorization'] = 'Bearer ' + sessionToken;
+
+        return makeRequest('POST', headers, 'api/Groups/AddUserToGroup', data, success, error);
+    }
     
     function uploadFile(sessionToken, groupId, file, success, error) {
         headers["Authorization"] = "Bearer " + sessionToken;
@@ -93,7 +114,9 @@ var ajaxRequester = (function () {
         retrieveMessagesByGidAll: retrieveMessagesByGidAll,
         retrieveMessagesByGidLimited: retrieveMessagesByGidLimited,
         getCurrentUser: getCurrentUser,
-        uploadFile: uploadFile
+        uploadFile: uploadFile,
+        postGroup: postGroup,
+        addUserToGroup: addUserToGroup
     };
 
 })();

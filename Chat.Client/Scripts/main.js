@@ -49,6 +49,10 @@
             retrieveMessagesbyGidClicked('all');
         });
 
+        $("#createGroup").on("click", function (e) {
+            createGroupClicked();
+        });
+
         $("#upload-file-button").on("click", function (e) {
             e.preventDefault();
             uploadFile();
@@ -195,6 +199,8 @@
                 errorMsg = errorText.error_description;
             } else if (action == 'logout') {
                 //add error message
+            } else if (action == 'addUserToGroup' || action == 'createGroup') {
+                errorMsg = errorText.Message;
             }
 
             utilities.notify('error', errorMsg);
@@ -211,18 +217,49 @@
 
         //:::::::::: Load User Groups, Friends  ::::::::::::::
 
+        var createGroupClicked = (function () {
+            var currentUser = userSession.get();
+            var groupName = $('#inputGroupName').val();
+
+            if (!groupName) {
+                utilities.notify('warning', 'Please insert name for group!');
+                return;
+            }
+
+            ajaxRequester.getCurrentUser(currentUser.access_token,
+                function(user) {
+                    ajaxRequester.postGroup(currentUser.access_token, groupName, user.Id, user.UserName,
+                        function (group) {
+                            utilities.notify('success', 'Group ' + group.Name + ' created successfully!', 2000);
+                            ajaxRequester.addUserToGroup(currentUser.access_token, group.Id, user.Id,
+                                function (data) {
+                                    utilities.notify('success', 'Your are added to ' + group.Name + ' successfully!', 2000);
+                                },
+                                function (error) {
+                                    requestError(error, 'addUserToGroup', 2000);
+                                }
+                            );
+                        },
+                        function (error) { requestError(error, 'createGroup', 2000);}
+                    );
+                },
+                function(error) {
+                    utilities.notify('error', 'Error occured. Could not create group', 2000);
+            });
+
+        });
+
         var loadGroups = (function () {
             var token = userSession.get().access_token;
             loadRequester.loadGroups(token,
                 function (data, statusText, xhr) {
                     if (xhr.status == 200) {
                         utilities.listLoader(data, 'groupsList');
-                        return;
                     } else if (xhr.status == 206) {
                         utilities.notify('info', data);
                     }
                 },
-                function(data) {
+                function(error) {
                     utilities.notify('error', 'Sorry, could not retrieve your groups.');
 				}
             );

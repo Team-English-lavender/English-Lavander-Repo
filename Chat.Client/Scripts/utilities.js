@@ -8,13 +8,20 @@ var utilities = (function() {
     };
 
     /********Notifications************/
-    function notify(type, msg) {
-        var timeout = (type == 'success') ? 500 : 1000;
+    function notify(type, msg, timeout) {
+        var time;
+
+        if (timeout) {
+            time = timeout;
+        } else {
+            time = (type == 'success') ? 500 : 1000;
+        }
+
         noty({
             text: msg,
             type: type,
             layout: 'topCenter',
-            timeout: timeout
+            timeout: time
         });
     }
 
@@ -41,8 +48,9 @@ var utilities = (function() {
     // :::::::::: Visualisations ::::::::::::::
 
     var listLoader = (function (objects, parentId) {
+        var $item = $('#' + parentId + '> ul').html('');
         for (var i = 0; i < objects.length; i++) {
-            $('#' + parentId + '> ul')
+            $item
                 .append($('<li class="lists" data-id="' + objects[i].Id +
                         '">' + objects[i].Name + '</li>')
                     .click(function() {
