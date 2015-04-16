@@ -48,15 +48,9 @@
                     </fieldset>
                 </form>
             </div>
-            <div class="well">
-                <h4>Friends List</h4>
-                <hr>
-                <div id="friendsList"><ul></ul></div>
-                <p><a id="friendsListBtn" class="btn btn-default" href="#">Load Friends</a></p>
-            </div>
         </div>
         <div class="col-md-6 col-md-offset-1">
-            <h2>Messages</h2>
+            <h2>Messages  <span class="groupNameLabel"></span></h2>
             <span class="help-block">All messages appear in the <strong>Message box below</strong>.</span>
             <div id="logger-wrapper" class="well">
                 <ul id="mssgLogger"></ul>
@@ -85,13 +79,28 @@
                 </form>
             </div>
         </div>
-        <div class="col-md-2 col-md-offset-1 well">
-            <h5>Chat history by Group</h5>
-            <hr>
-            <button id="retrieveMessagesByGidLimited" class="btn btn-default" type="button">Retrieve [3]</button>
-            <br />
-            <br />
-            <button id="retrieveMessageByGidsAll" class="btn btn-success" type="button">Retrieve ALL</button>
+        <div class="col-md-2 col-md-offset-1">
+            <div class="col-md-12 well">
+                <h5>Chat history by Group</h5>
+                <hr>
+                <button id="retrieveMessagesByGidLimited" class="btn btn-default" type="button">Retrieve [3]</button>
+                <br />
+                <br />
+                <button id="retrieveMessageByGidsAll" class="btn btn-success" type="button">Retrieve ALL</button>
+            </div>
+            <div class="col-md-12 well">
+                <p>Add User To Friends</p>
+                <select class="col-md-12" id="allUsersSelect"></select>
+                <button class="col-md-12" id="loadUsers" type="button">Get users</button>
+                <h4>Friends List</h4>
+                <hr>
+                <div id="friendsList">
+                    <ul></ul>
+                </div>
+                <p>
+                    <a id="friendsListBtn" class="btn btn-default" href="#">Load Friends</a>
+                </p>
+            </div>
         </div>
     </div>
 </div>

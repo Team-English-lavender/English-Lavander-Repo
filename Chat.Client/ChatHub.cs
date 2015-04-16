@@ -30,7 +30,7 @@ namespace Chat.Client
                 //the user in the client is different with the registered user
                 //Probably logout the user server side and client side
             }
-            Clients.All.broadCastMessage(time.ToString(format), sender, message);
+            Clients.All.broadCastMessage(time.ToString(format), sender, message, groupId);
         }
 
         public override Task OnConnected()

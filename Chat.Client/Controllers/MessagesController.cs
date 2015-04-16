@@ -71,7 +71,8 @@
             int messagesCount = count ?? LastMessagesCount;
 
             var messages = this.Data.Messages
-                .GetLastByGroup(groupId, count, LastMessagesCount)
+                .GetLastByGroup(groupId, count, messagesCount)
+                .OrderBy(m => m.Time)
                 .ToList();
             if (!messages.Any())
             {

@@ -7,8 +7,12 @@
             e.preventDefault();
         });
 
-        hub.on('broadCastMessage', function (time, sender, mssg) {
-            $('#mssgLogger').append('<li><small>[' + time + '] <strong>' + sender + '</strong>:</small> ' + mssg + '</li>');
+        hub.on('broadCastMessage', function (time, sender, mssg, groupId) {
+            var group = groopStorage.get();
+            if (groupId == group.id) {
+                $('#mssgLogger').append('<li><small>[' + time + '] <strong>' + sender + '</strong>:</small> ' + mssg + '</li>');
+            }
+           
         });
 
         connection.start().done(function () {
@@ -30,9 +34,9 @@
                     ajaxRequester.postMessage(token, mssg, group.id,
                         function (data) {
                             console.log(data);
-                            hub.invoke('joinRoom', group.name);
-                            //hub.invoke('sendMessage', sender, mssg);
-                            hub.invoke("sendMessageToGroup", user, mssg, group.name);
+                            //hub.invoke('joinRoom', group.name);
+                            hub.invoke('sendMessage', sender, mssg, group.id);
+                            //hub.invoke("sendMessageToGroup", user, mssg, group.name);
                            
                             $("#logger-wrapper").animate({ scrollTop: $("#logger-wrapper").prop("scrollHeight") }, 100);
                         },

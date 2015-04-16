@@ -63,6 +63,11 @@
             uploadFile();
         });
 
+        $('#loadUsers').on('click', function (e) {
+            e.preventDefault();
+            loadAllUsers();
+        });
+
         /**************Rgistration*****************/
         function registerClicked() {
             var name = $('#inputUserName').val();
@@ -223,6 +228,7 @@
         //:::::::::: Load User Groups, Friends  ::::::::::::::
 
         var createGroupClicked = (function () {
+            $('#inputGroupName').text('');
             var currentUser = userSession.get();
             var groupName = $('#inputGroupName').val();
 
@@ -235,6 +241,7 @@
                 function(user) {
                     ajaxRequester.postGroup(currentUser.access_token, groupName, user.Id, user.UserName,
                         function (group) {
+                            loadGroups();
                             utilities.notify('success', 'Group ' + group.Name + ' created successfully!', 2000);
                             ajaxRequester.addUserToGroup(currentUser.access_token, group.Id, user.Id,
                                 function (data) {
@@ -274,8 +281,8 @@
             var token = userSession.get().access_token;
             loadRequester.loadFriends(token,
                 function (data) {
-                    if (data.length > 1) {
-                        utilities.listLoader(data, 'friendsList');
+                    if (data.length >= 1) {
+                        utilities.listLoaderUser(data, 'friendsList');
                         return;
                     }
                     utilities.notify('info', 'No friends currently.');
@@ -299,6 +306,21 @@
                     utilities.notify('error', 'Sorry, could not retrieve all groups.');
                 }
             );
+        });
+
+        var loadAllUsers = (function() {
+            var token = userSession.get().access_token;
+            ajaxRequester.loadAllUsers(token,
+                function (data, statusText, xhr) {
+                    if (xhr.status == 200) {
+                        utilities.selectLoader(data, 'allUsersSelect');
+                    } else if (xhr.status == 206) {
+                        utilities.notify('info', data);
+                    }
+                },
+                function() {
+                    utilities.notify('error', 'Sorry, could not retrieve all users.');
+                });
         });
 
     });

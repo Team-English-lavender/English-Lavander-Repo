@@ -52,7 +52,7 @@ body.loading .modal {
     padding: 2px;
 }
 
-#groupsList > ul li:hover, #friendsList > ul li:hover{
+#groupsList > ul li:hover, #friendsList > ul li:hover, #groupsListAll > ul li:hover {
     background-color: #D9D9D9;
     cursor: pointer;
 }

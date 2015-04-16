@@ -56,7 +56,34 @@ var utilities = (function() {
                     .click(function() {
                         var id = $(this).data("id");
                         var name = $(this).text();
+                        $('.groupNameLabel').text(' - ' + name);
                         groupProcess.groupClicked(id, name);
+                    }));
+        }
+    });
+
+    var listLoaderUser = (function (objects, parentId) {
+        var $item = $('#' + parentId + '> ul').html('');
+        for (var i = 0; i < objects.length; i++) {
+            $item.append($('<li class="lists" data-id="' + objects[i].Id +
+                        '">' + objects[i].UserName + '</li>')
+                    .click(function () {
+                        var id = $(this).data("id");
+                        var name = $(this).text();
+                        groupProcess.groupClicked(id, name);
+                    }));
+        }
+    });
+    // <option value="volvo">Volvo</option>
+    var selectLoader = (function (objects, parentId) {
+        var $item = $('#' + parentId).html('');
+        for (var i = 0; i < objects.length; i++) {
+            $item.append($('<option class="lists" data-id="' + objects[i].Id +
+                        '">' + objects[i].UserName + '</option>')
+                    .click(function () {
+                        var id = $(this).data("id");
+                        var name = $(this).text();
+                        groupProcess.userClicked(id, name);
                     }));
         }
     });
@@ -80,6 +107,8 @@ var utilities = (function() {
         replaceTags: safeTagsReplace,
         listLoader: listLoader,
         clearMessages: clearMessages,
-        addMessagesToLogger: addMessagesToLogger
+        addMessagesToLogger: addMessagesToLogger,
+        selectLoader: selectLoader,
+        listLoaderUser: listLoaderUser
     };
 })();

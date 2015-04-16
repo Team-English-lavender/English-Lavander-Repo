@@ -86,11 +86,16 @@ var ajaxRequester = (function () {
 
     function addUserToGroup(sessionToken, groupId, userId, success, error) {
         var data = JSON.stringify({ UserId: userId, GroupId: groupId });
-
         headers['Authorization'] = 'Bearer ' + sessionToken;
 
         return makeRequest('POST', headers, 'api/Groups/AddUserToGroup', data, success, error);
     }
+
+    function loadAllUsers(sessionToken, success, error) {
+        headers['Authorization'] = 'Bearer ' + sessionToken;
+        return makeRequest('GET', headers, 'api/Users/GetAll', null, success, error);
+    }
+    
     
     function uploadFile(sessionToken, groupId, file, success, error) {
         headers["Authorization"] = "Bearer " + sessionToken;
@@ -106,6 +111,14 @@ var ajaxRequester = (function () {
             error: error
         });
     }
+
+    function addUserToFriends(sessionToken, userName, userId, success, error) {
+        var data = JSON.stringify({ Id: userId, UserName: userName });
+        headers['Authorization'] = 'Bearer ' + sessionToken;
+
+        return makeRequest('POST', headers, 'api/Users/AddFriend', data, success, error);
+    }
+
     return {
         register: register,
         login: login,
@@ -116,7 +129,9 @@ var ajaxRequester = (function () {
         getCurrentUser: getCurrentUser,
         uploadFile: uploadFile,
         postGroup: postGroup,
-        addUserToGroup: addUserToGroup
+        addUserToGroup: addUserToGroup,
+        loadAllUsers: loadAllUsers,
+        addUserToFriends: addUserToFriends
     };
 
 })();
