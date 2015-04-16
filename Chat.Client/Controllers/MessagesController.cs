@@ -58,7 +58,7 @@
             var messages = this.Data.Messages.GetAllByGroupId(groupId);
             if (!messages.Any())
             {
-                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No messages in this group."));
+                return ResponseMessage(Request.CreateResponse(HttpStatusCode.PartialContent, "No messages in this group."));
             }
 
             return this.Ok(messages);
@@ -76,7 +76,7 @@
             if (!messages.Any())
             {
                 return ResponseMessage(Request
-                    .CreateErrorResponse(HttpStatusCode.NotFound, "No messages in this group."));
+                    .CreateResponse(HttpStatusCode.PartialContent, "No messages in this group."));
             }
 
             return this.Ok(messages);

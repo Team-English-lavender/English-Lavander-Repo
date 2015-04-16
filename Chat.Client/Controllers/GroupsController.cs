@@ -48,7 +48,7 @@
 
             if (!groups.Any())
             {
-                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "Currently dont have created groups"));
+                return ResponseMessage(Request.CreateResponse(HttpStatusCode.PartialContent, "Currently dont have created groups"));
             }
 
             return this.Ok(groups);
@@ -77,7 +77,7 @@
 
             if (!groups.Any())
             {
-                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound,
+                return ResponseMessage(Request.CreateResponse(HttpStatusCode.PartialContent,
                         "Currently dont have groups with that user."));
             }
 
@@ -97,8 +97,10 @@
             Group newGroup = new Group()
             {
                 Name = model.Name,
-                IsPublic = model.IsPublic
-
+                IsPublic = model.IsPublic,
+                // Would be great if we could attach users here
+                // but there is a cast promlem
+                //Users = model.Users
             };
 
             this.Data.Groups.Add(newGroup);

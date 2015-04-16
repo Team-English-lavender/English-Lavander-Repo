@@ -16,15 +16,43 @@
     <div class="row">
         <div class="col-md-2">
             <div class="well">
-                <h3>Friends List</h3>
-                <div id="friendsList"><ul></ul></div>
-                <p><a id="friendsListBtn" class="btn btn-default" href="#">Load Friends</a></p>
-            </div>
-            <div class="well">
-                <h3>Groups List</h3>
+                <h5>My Groups List</h5>
+                <hr>
                 <div id="groupsList"><ul></ul></div>
                 <p><a id="groupsListBtn" class="btn btn-default" href="#">Load Groups</a>
                 </p>
+            </div>
+            <div class="well">
+                <h5>All Groups List</h5>
+                <hr>
+                <div id="groupsListAll"><ul></ul></div>
+                <p>
+                    <a id="groupsListBtnAll" class="btn btn-default" href="#">Load All</a>
+                </p>
+            </div>
+            <div class="well">
+                <h4>Create Group</h4>
+                <hr>
+                <form id="creatGroupForm" class="form-horizontal">
+                    <fieldset>
+                        <div class="form-group">
+                            <div class="col-lg-12">
+                                <input class="form-control" id="inputGroupName" placeholder="Group Name" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-12">
+                                <button id="createGroup" type="button" class="btn btn-default">Create</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="well">
+                <h4>Friends List</h4>
+                <hr>
+                <div id="friendsList"><ul></ul></div>
+                <p><a id="friendsListBtn" class="btn btn-default" href="#">Load Friends</a></p>
             </div>
         </div>
         <div class="col-md-6 col-md-offset-1">
@@ -58,7 +86,7 @@
             </div>
         </div>
         <div class="col-md-2 col-md-offset-1 well">
-            <h4>Chat history</h4>
+            <h5>Chat history by Group</h5>
             <hr>
             <button id="retrieveMessagesByGidLimited" class="btn btn-default" type="button">Retrieve [3]</button>
             <br />

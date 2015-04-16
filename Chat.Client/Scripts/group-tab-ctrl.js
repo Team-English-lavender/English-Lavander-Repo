@@ -5,12 +5,17 @@ var groupProcess = (function() {
         var group = { id: groupId, name: groupName };
         groopStorage.save(group);
         var token = userSession.get().access_token;
+
         ajaxRequester.retrieveMessagesByGidLimited(token, groupId,
-            function (data) {
-                utilities.addMessagesToLogger(data);
+            function (data, statusText, xhr) {
+                if (xhr.status == 200) {
+                    utilities.addMessagesToLogger(data);
+                } else if (xhr.status == 206) {
+                    utilities.notify('info', Message);
+                }                
             },
             function (data) {
-                utilities.notify('error', 'It is not imposibile to load messages now try later.');
+                utilities.notify('error', 'It is not posibile to load messages now try later.');
             }, null);
     }
                 
