@@ -115,17 +115,14 @@
 
         function retrieveMessagesbyGidClicked(type) {
             var currentSession = userSession.get();
-            // Get dynamically the group Id
-            var groupId = 1;
+                        // { id: groupId, name: groupName };
+            var groupId = groopStorage.get().id;
 
             if (type == 'limited') {
                 ajaxRequester.retrieveMessagesByGidLimited(currentSession.access_token, groupId,
-                    function(data) {
-                        var html = '';
-                        $.each(data, function(key, value) {
-                            html += '<li><small>[' + value.Time + '] <strong>' + value.UserName + '</strong>:</small> ' + value.MessageText + '</li>';
-                        });
-                        $('#mssgLogger').append(html);
+                    function (data) {
+                        utilities.clearMessages();
+                        utilities.addMessagesToLogger(data);
                     },
                     function(data) {
                         utilities.notify('error', 'Sorry, could not retrieve your history');
@@ -134,11 +131,8 @@
             } else if (type == 'all') {
                 ajaxRequester.retrieveMessagesByGidAll(currentSession.access_token, groupId,
                     function(data) {
-                        var html = '';
-                        $.each(data, function(key, value) {
-                            html += '<li><small>[' + value.Time + '] <strong>' + value.UserName + '</strong>:</small> ' + value.MessageText + '</li>';
-                        });
-                        $('#mssgLogger').append(html);
+                        utilities.clearMessages();
+                        utilities.addMessagesToLogger(data);
                     },
                     function(data) {
                         utilities.notify('error', 'Sorry, could not retrieve your full history');
@@ -195,19 +189,19 @@
         });
 
         //:::::::::: Load User Groups, Friends  ::::::::::::::
+
         var loadGroups = (function() {
             var token = userSession.get().access_token;
             loadRequester.loadGroups(token,
                 function(data) {
                     if (data.length > 1) {
-                        listLoader(data, 'groupsList');
+                        utilities.listLoader(data, 'groupsList');
                         return;
                     }
                     utilities.notify('error', "No groups currently.");
                 },
                 function(data) {
-                    var a = data;
-                    console.log(data);
+                    utilities.notify('error', 'Sorry, could not retrieve your groups.');
                 }
             );
         });
@@ -217,20 +211,14 @@
             loadRequester.loadFriends(token,
                 function(data) {
                     if (data.length > 1) {
-                        listLoader(data, 'friendsList');
+                        utilities.listLoader(data, 'friendsList');
                         return;
                     }
                     utilities.notify('error', 'No friends currently.');
                 },
                 function(data) {
-
+                    utilities.notify('error', 'Sorry, could not retrieve your friends, try later.');
                 });
-        });
-
-        var listLoader = (function(objects, parentId) {
-            for (var i = 0; i < objects.length; i++) {
-                $('#' + parentId + '> ul').append('<li>' + objects[i].Name + '</li>').data('Id', objects[i].Id);
-            }
         });
     });
 })(jQuery);

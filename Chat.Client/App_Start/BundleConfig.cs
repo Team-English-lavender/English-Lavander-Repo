@@ -26,7 +26,9 @@ namespace Chat.Client
                       "~/Scripts/utilities.js",
                       "~/Scripts/userSession.js",
                       "~/Scripts/main.js",
-                      "~/Scripts/load-requester.js"));
+                      "~/Scripts/load-requester.js",
+                      "~/Scripts/group-tab-ctrl.js",
+                      "~/Scripts/groopStorage.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/signalR").Include(
                       "~/Scripts/jquery.signalR-2.2.0.js",

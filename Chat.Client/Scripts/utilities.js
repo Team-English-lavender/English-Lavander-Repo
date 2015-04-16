@@ -1,5 +1,5 @@
 ﻿'use strict';
-var utilities = (function () {
+var utilities = (function() {
 
     var tagsToReplace = {
         '&': '&amp;',
@@ -25,7 +25,7 @@ var utilities = (function () {
             destination += redirectURL;
         }
         console.log(timeOfDelay);
-        setTimeout(function () {
+        setTimeout(function() {
             window.location = destination;
         }, timeOfDelay);
     }
@@ -38,10 +38,40 @@ var utilities = (function () {
         return str.replace(/[&<>]/g, replaceTag);
     }
 
+    // :::::::::: Visualisations ::::::::::::::
+
+    var listLoader = (function(objects, parentId) {
+        for (var i = 0; i < objects.length; i++) {
+            $('#' + parentId + '> ul')
+                .append($('<li class="lists" data-id="' + objects[i].Id +
+                        '">' + objects[i].Name + '</li>')
+                    .click(function() {
+                        var id = $(this).data("id");
+                        var name = $(this).text();
+                        groupProcess.groupClicked(id, name);
+                    }));
+        }
+    });
+
+    var addMessagesToLogger = function (data) {
+        utilities.clearMessages();
+        var html = '';
+        $.each(data, function (key, value) {
+            html += '<li><small>[' + value.Time + '] <strong>' + value.UserName + '</strong>:</small> ' + value.MessageText + '</li>';
+        });
+        $('#mssgLogger').append(html);
+    };
+
+    var clearMessages = (function () {
+        $('#mssgLogger').html('');
+    });
+
     return {
         notify: notify,
         redirectToHome: redirectToHome,
-        replaceTags: safeTagsReplace
+        replaceTags: safeTagsReplace,
+        listLoader: listLoader,
+        clearMessages: clearMessages,
+        addMessagesToLogger: addMessagesToLogger
     };
-
 })();

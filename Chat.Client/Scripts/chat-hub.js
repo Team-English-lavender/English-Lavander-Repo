@@ -11,27 +11,36 @@
             $('#mssgLogger').append('<li><small>[' + time + '] <strong>' + sender + '</strong>:</small> ' + mssg + '</li>');
         });
 
-
         connection.start().done(function () {
             $('#send').click(function (e) {
                 e.preventDefault();
 
                 var sender = $('#textMessage').data('sender');
+                var currentSession = userSession.get();
+                var token = currentSession.access_token;
+                var user = {};
+                ajaxRequester.getCurrentUser(token, 
+                    function(data) {
+                        user = data;
+                    },
+                    function() {
+                        
+                    });
+
                 var mssg = utilities.replaceTags($('#textMessage').val());
                 // must retrieve group id dynamically
-                var groupId = 1;
+                var group = groopStorage.get();
 
                 $('#textMessage').val('');
 
-                var currentSession = userSession.get();
-
                 if (currentSession) {
-                    var token = currentSession.access_token;
-
-                    ajaxRequester.postMessage(token, mssg, groupId,
+                    ajaxRequester.postMessage(token, mssg, group.id,
                         function (data) {
                             console.log(data);
+                            //hub.invoke('joinRoom', group.name);
                             hub.invoke('sendMessage', sender, mssg);
+                            //hub.invoke("sendMessageToGroup", user, mssg, group.name);
+                           
                             $("#logger-wrapper").animate({ scrollTop: $("#logger-wrapper").prop("scrollHeight") }, 100);
                         },
                         function (data) {

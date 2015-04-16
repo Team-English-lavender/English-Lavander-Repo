@@ -11,18 +11,19 @@ using System.Globalization;
 namespace Chat.Client
 {
     using Data;
+    using Models;
 
     [HubName("chatHub")]
     public class ChatHub : Hub
     {
+        private IChatData data = new ChatData(new ChatDbContext());
         //Sender will be replaced with the username of the logged in user
-        public void SendMessage(string sender, string message)
+        public void SendMessage(string sender, string message, int groupId)
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 
             DateTime time = DateTime.Now;
             string format = "HH:mm:ss";
-            
 
             if (Context.User.Identity.Name != sender)
             {
@@ -41,9 +42,26 @@ namespace Chat.Client
         {
             string mssg = "Left Chat";
 
-            this.SendMessage(Context.User.Identity.Name, mssg);
+            this.SendMessage(Context.User.Identity.Name, mssg, 0);
 
             return base.OnDisconnected(stopCalled);
+        }
+
+        public void SendMessageToGroup(string sender, string message, string groupName)
+        {
+            //var group = this.data.Groups.All().Where(g => g.Id == groupId).FirstOrDefault();
+
+            Clients.Group(groupName).broadCastMessage(DateTime.Now, sender, message);
+        }
+
+        public Task JoinRoom(string roomName)
+        {
+            return Groups.Add(Context.ConnectionId, roomName);
+        }
+
+        public Task LeaveRoom(string roomName)
+        {
+            return Groups.Remove(Context.ConnectionId, roomName);
         }
     }
 }

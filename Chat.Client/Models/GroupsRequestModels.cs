@@ -28,4 +28,11 @@ namespace Chat.Client.Models
 
         public int GroupId { get; set; }
     }
+
+    public class GropuTransModel
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+    }
 }
