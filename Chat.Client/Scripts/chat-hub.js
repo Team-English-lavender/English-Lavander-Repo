@@ -19,13 +19,6 @@
                 var currentSession = userSession.get();
                 var token = currentSession.access_token;
                 var user = {};
-                ajaxRequester.getCurrentUser(token, 
-                    function(data) {
-                        user = data;
-                    },
-                    function() {
-                        
-                    });
 
                 var mssg = utilities.replaceTags($('#textMessage').val());
                 // must retrieve group id dynamically

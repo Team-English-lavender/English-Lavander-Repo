@@ -3,9 +3,9 @@
 var ajaxRequester = (function () {
 
     // baseUrl must be changed when deploying application
-    var baseUrl = "http://localhost:44965/";
+    //var baseUrl = "http://localhost:44965/";
 
-    //var baseUrl = "http://lavander-chat.apphb.com/";
+    var baseUrl = "http://lavander-chat.apphb.com/";
 
 
     var headers = {};

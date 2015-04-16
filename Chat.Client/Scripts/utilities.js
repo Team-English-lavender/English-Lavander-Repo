@@ -40,7 +40,7 @@ var utilities = (function() {
 
     // :::::::::: Visualisations ::::::::::::::
 
-    var listLoader = (function(objects, parentId) {
+    var listLoader = (function (objects, parentId) {
         for (var i = 0; i < objects.length; i++) {
             $('#' + parentId + '> ul')
                 .append($('<li class="lists" data-id="' + objects[i].Id +

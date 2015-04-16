@@ -77,7 +77,7 @@
 
             if (!groups.Any())
             {
-                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound,
+                return ResponseMessage(Request.CreateResponse(HttpStatusCode.PartialContent,
                         "Currently dont have groups with that user."));
             }
 

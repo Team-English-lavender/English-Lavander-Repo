@@ -105,7 +105,6 @@
 
         function logoutClicked() {
             authSuccess(null, 'logout');
-            utilities.redirectToHome();
 
             //ajaxRequester.logout(
             //    function (data) {
@@ -215,12 +214,13 @@
         var loadGroups = (function () {
             var token = userSession.get().access_token;
             loadRequester.loadGroups(token,
-                function (data) {
-                    if (data.length > 1) {
+                function (data, statusText, xhr) {
+                    if (xhr.status == 200) {
                         utilities.listLoader(data, 'groupsList');
                         return;
+                    } else if (xhr.status == 206) {
+                        utilities.notify('info', data);
                     }
-                    utilities.notify('error', "No groups currently.");
                 },
                 function(data) {
                     utilities.notify('error', 'Sorry, could not retrieve your groups.');
@@ -236,17 +236,12 @@
                         utilities.listLoader(data, 'friendsList');
                         return;
                     }
-                    utilities.notify('error', 'No friends currently.');
+                    utilities.notify('info', 'No friends currently.');
                 },
                 function(data) {
                     utilities.notify('error', 'Sorry, could not retrieve your friends, try later.');
                 });
         });
 
-        var listLoader = (function (objects, parentId) {
-            for (var i = 0; i < objects.length; i++) {
-                $('#' + parentId + '> ul').append('<li>' + objects[i].Name + '</li>').data('Id', objects[i].Id);
-            }
-        });
     });
 })(jQuery);
