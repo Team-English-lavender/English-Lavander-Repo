@@ -1,6 +1,6 @@
 ﻿'use strict';
-(function($) {
-    $(function() {
+(function ($) {
+    $(function () {
 
         var currentSession = userSession.get();
         if (currentSession) {
@@ -11,12 +11,12 @@
             $('.user-link, .user-section').hide();
         }
 
-        $('#register').on('click', function(e) {
+        $('#register').on('click', function (e) {
             e.preventDefault();
             registerClicked();
         });
 
-        $('#login').on('click', function(e) {
+        $('#login').on('click', function (e) {
             e.preventDefault();
             $('.visitor-link, .visitor-section').hide();
             $('.user-link, .user-section').show();
@@ -24,7 +24,7 @@
             loginClicked();
         });
 
-        $('#logout').on('click', function(e) {
+        $('#logout').on('click', function (e) {
             e.preventDefault();
             $('.visitor-link, .visitor-section').show();
             $('.user-link, .user-section').hide();
@@ -32,11 +32,11 @@
             logoutClicked();
         });
 
-        $('#friendsListBtn').click(function(e) {
+        $('#friendsListBtn').click(function (e) {
             e.preventDefault();
             loadFriends();
         });
-        $('#groupsListBtn').click(function(e) {
+        $('#groupsListBtn').click(function (e) {
             e.preventDefault();
             loadGroups();
         });
@@ -47,6 +47,11 @@
 
         $('#retrieveMessageByGidsAll').on('click', function () {
             retrieveMessagesbyGidClicked('all');
+        });
+
+        $("#upload-file-button").on("click", function (e) {
+            e.preventDefault();
+            uploadFile();
         });
 
         /**************Rgistration*****************/
@@ -68,12 +73,11 @@
                 utilities.notify('error', 'Passwords must be identical!');
                 return;
             }
-
             ajaxRequester.register(name, pass, confirmPass, email,
-                function(data) {
+                function (data) {
                     authSuccess(data, 'register');
                 },
-                function(data) {
+                function (data) {
                     requestError(data, 'register');
                 });
         }
@@ -89,11 +93,11 @@
             }
 
             ajaxRequester.login(uname, upass,
-                function(data) {
+                function (data) {
                     authSuccess(data, 'login');
                     utilities.redirectToHome();
                 },
-                function(data) {
+                function (data) {
                     requestError(data, 'login');
                 });
         }
@@ -113,6 +117,24 @@
             //});
         }
 
+        /* File Upload */
+        function uploadFile() {
+            var token = userSession.get().access_token;
+            var data = new FormData(document.getElementById("upload-form"));
+            //var files = $("#upload-file");
+            //if (files.length > 0) {
+            //    data.append("UploadedFile", files[0]);
+            //}
+
+            ajaxRequester.uploadFile(token, 0, data, // TODO: change group ID
+                function (response) {
+                    console.log(response)
+                },
+            function (err) {
+                console.log(err)
+            });
+        }
+
         function retrieveMessagesbyGidClicked(type) {
             var currentSession = userSession.get();
                         // { id: groupId, name: groupName };
@@ -124,7 +146,7 @@
                         utilities.clearMessages();
                         utilities.addMessagesToLogger(data);
                     },
-                    function(data) {
+                    function (data) {
                         utilities.notify('error', 'Sorry, could not retrieve your history');
                     }
                 )
@@ -134,7 +156,7 @@
                         utilities.clearMessages();
                         utilities.addMessagesToLogger(data);
                     },
-                    function(data) {
+                    function (data) {
                         utilities.notify('error', 'Sorry, could not retrieve your full history');
                     }
                 )
@@ -180,20 +202,20 @@
         }
 
         /*********** Waiting Action ***********/
-        $(document).ajaxStart(function() {
+        $(document).ajaxStart(function () {
             $('body').addClass("loading");
         });
 
-        $(document).ajaxStop(function() {
+        $(document).ajaxStop(function () {
             $('body').removeClass("loading");
         });
 
         //:::::::::: Load User Groups, Friends  ::::::::::::::
 
-        var loadGroups = (function() {
+        var loadGroups = (function () {
             var token = userSession.get().access_token;
             loadRequester.loadGroups(token,
-                function(data) {
+                function (data) {
                     if (data.length > 1) {
                         utilities.listLoader(data, 'groupsList');
                         return;
@@ -202,14 +224,14 @@
                 },
                 function(data) {
                     utilities.notify('error', 'Sorry, could not retrieve your groups.');
-                }
+				}
             );
         });
 
-        var loadFriends = (function() {
+        var loadFriends = (function () {
             var token = userSession.get().access_token;
             loadRequester.loadFriends(token,
-                function(data) {
+                function (data) {
                     if (data.length > 1) {
                         utilities.listLoader(data, 'friendsList');
                         return;
@@ -219,6 +241,12 @@
                 function(data) {
                     utilities.notify('error', 'Sorry, could not retrieve your friends, try later.');
                 });
+        });
+
+        var listLoader = (function (objects, parentId) {
+            for (var i = 0; i < objects.length; i++) {
+                $('#' + parentId + '> ul').append('<li>' + objects[i].Name + '</li>').data('Id', objects[i].Id);
+            }
         });
     });
 })(jQuery);

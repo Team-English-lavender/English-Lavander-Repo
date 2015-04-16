@@ -7,6 +7,7 @@ var ajaxRequester = (function () {
 
     //var baseUrl = "http://lavander-chat.apphb.com/";
 
+
     var headers = {};
 
 
@@ -19,7 +20,7 @@ var ajaxRequester = (function () {
             data: data,
             success: success,
             error: error
-        })
+        });
     }
 
     function register(username, password, confirmPass, email, success, error) {
@@ -65,13 +66,25 @@ var ajaxRequester = (function () {
 
         return makeRequest('GET', headers, 'api/Messages/GetAllByGroup?groupId=' + groupId, null, success, error);
     }
-
     function getCurrentUser(sessionToken, success, error) {
         headers['Authorization'] = 'Bearer ' + sessionToken;
         return makeRequest('GET', headers, 'api/Users/GetCurrentUser', null, success, error);
     }
     
-
+    function uploadFile(sessionToken, groupId, file, success, error) {
+        headers["Authorization"] = "Bearer " + sessionToken;
+        return $.ajax({
+            type: "POST",
+            headers: headers,
+            url: baseUrl + "api/Files/UploadFile?groupId=" + groupId,
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: file,
+            success: success,
+            error: error
+        });
+    }
     return {
         register: register,
         login: login,
@@ -79,7 +92,8 @@ var ajaxRequester = (function () {
         postMessage: postMessage,
         retrieveMessagesByGidAll: retrieveMessagesByGidAll,
         retrieveMessagesByGidLimited: retrieveMessagesByGidLimited,
-        getCurrentUser: getCurrentUser
+        getCurrentUser: getCurrentUser,
+        uploadFile: uploadFile
     };
 
 })();

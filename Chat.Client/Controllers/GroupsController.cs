@@ -8,6 +8,9 @@
     using Data;
     using Microsoft.AspNet.Identity;
     using Models;
+    using System.Threading.Tasks;
+    using System.Web;
+    using Chat.Client.Providers;
 
     [Authorize]
     [RoutePrefix("api/Groups")]
@@ -21,7 +24,7 @@
         public GroupsController(IChatData data)
             : base(data)
         {
-            
+
         }
 
         [HttpGet]
@@ -86,10 +89,10 @@
         public IHttpActionResult CreateGroup([FromBody]GroupsExportModel model)
         {
             if (this.Data.Groups.All().Where(g => g.Name == model.Name).Any())
-	        {
+            {
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound,
                         "Already exists group with that name."));
-	        }
+            }
 
             Group newGroup = new Group()
             {
@@ -124,7 +127,7 @@
 
             group.Users.Add(user);
             this.Data.SaveChanges();
-            return this.Ok(new { GroupId = group.Id, UserId = user.Id});
+            return this.Ok(new { GroupId = group.Id, UserId = user.Id });
         }
     }
 }
