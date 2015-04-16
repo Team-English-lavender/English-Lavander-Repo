@@ -41,6 +41,11 @@
             loadGroups();
         });
 
+        $('#groupsListBtnAll').click(function (e) {
+            e.preventDefault();
+            loadGroupsAll();
+        });
+
         $('#retrieveMessagesByGidLimited').on('click', function () {
             retrieveMessagesbyGidClicked('limited');
         });
@@ -278,6 +283,22 @@
                 function(data) {
                     utilities.notify('error', 'Sorry, could not retrieve your friends, try later.');
                 });
+        });
+
+        var loadGroupsAll = (function () {
+            var token = userSession.get().access_token;
+            loadRequester.loadAllGroups(token,
+                function (data, statusText, xhr) {
+                    if (xhr.status == 200) {
+                        utilities.listLoader(data, 'groupsListAll');
+                    } else if (xhr.status == 206) {
+                        utilities.notify('info', data);
+                    }
+                },
+                function (error) {
+                    utilities.notify('error', 'Sorry, could not retrieve all groups.');
+                }
+            );
         });
 
     });

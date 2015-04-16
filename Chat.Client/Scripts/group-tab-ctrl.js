@@ -18,12 +18,9 @@ var groupProcess = (function() {
                 utilities.notify('error', 'It is not posibile to load messages now try later.');
             }, null);
     }
-
-    function loadAllGroups() { }
                 
     return {
-        groupClicked: groupClicked,
-        loadAllGroups: loadAllGroups
+        groupClicked: groupClicked
     };
 }());
 

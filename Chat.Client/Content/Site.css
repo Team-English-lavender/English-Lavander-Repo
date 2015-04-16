@@ -41,13 +41,13 @@ body.loading .modal {
     display: block;
 }
 
-#groupsList > ul, #friendsList > ul {
+#groupsList > ul, #friendsList > ul, #groupsListAll > ul {
     list-style: none;
     width: 100%;
     padding: 3px;
 }
 
-#groupsList > ul li, #friendsList > ul li{
+#groupsList > ul li, #friendsList > ul li, #groupsListAll > ul li {
     margin: 2px;
     padding: 2px;
 }
